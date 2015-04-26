@@ -9,73 +9,130 @@ using System.Windows.Input;
 
 namespace NeoBrowser.ViewModels
 {
-    public class MainWindow_ViewModel: ViewModelBase
+    public class MainWindow_ViewModel : ViewModelBase
     {
         private string _neoUrl;
         private string _neoUser;
         private string _neoPassword;
 
+        public GraphBrowser Browser
+        {
+            get
+            {
+                return (GraphBrowser)App.Current.TryFindResource("browser");
+            }
+            set
+            {
+                App.Current.Resources["browser"] = value;
+            }
+        }
+
         public MainWindow_ViewModel()
         {
-            NeoUrl = "http://localhost:7474";
-            NeoUser = "Neo4j";
-            NeoPassword = "Neo4j";
+            Host = "localhost";
+            Port = 7474;
+            User = "neo4j";
+            Password = "longbow";
+            UseSsl = false;
             ConnectCommand = new RelayCommand(Connect);
         }
 
-        public ICommand ConnectCommand{get; private set;}
+        public ICommand ConnectCommand { get; private set; }
 
         private void Connect()
         {
-            dynamic oldBrowser = App.Current.TryFindResource("browser");
-            if (oldBrowser != null)
-            {
-                oldBrowser.Close();
-            }
-            App.Current.Resources["browser"] = new GraphBrowser(NeoUrl, NeoUser, NeoPassword);
+            Browser = new GraphBrowser(Host, Port, User, Password, UseSsl);
+            Browser.GoToNode(1);
         }
+        #region string Host
 
-        public string NeoUrl
+        private string _host;
+        public string Host
         {
             get
             {
-                return _neoUrl;
+                return _host;
             }
             set
             {
-                if (_neoUrl == value) return;
-                _neoUrl = value;
-                RaisePropertyChanged("NeoUrl");
+                if (_host == value) return;
+                _host = value;
+                RaisePropertyChanged("Host");
             }
         }
-        public string NeoUser
+
+        #endregion string Host
+        #region int Port
+
+        private int _port;
+        public int Port
         {
             get
             {
-                return _neoUser;
+                return _port;
             }
             set
             {
-                if (_neoUser == value) return;
-                _neoUser = value;
-                RaisePropertyChanged("NeoUser");
+                if (_port == value) return;
+                _port = value;
+                RaisePropertyChanged("Port");
             }
         }
-        public string NeoPassword
+
+        #endregion int Port
+        #region string User
+
+        private string _user;
+        public string User
         {
             get
             {
-                return _neoPassword;
+                return _user;
             }
             set
             {
-                if (_neoPassword == value) return;
-                _neoPassword = value;
-                RaisePropertyChanged("NeoPassword");
+                if (_user == value) return;
+                _user = value;
+                RaisePropertyChanged("User");
             }
         }
 
+        #endregion string User
+        #region string Password
 
+        private string _password;
+        public string Password
+        {
+            get
+            {
+                return _password;
+            }
+            set
+            {
+                if (_password == value) return;
+                _password = value;
+                RaisePropertyChanged("Password");
+            }
+        }
 
+        #endregion string Password
+        #region bool UseSsl
+
+        private bool _useSsl;
+        public bool UseSsl
+        {
+            get
+            {
+                return _useSsl;
+            }
+            set
+            {
+                if (_useSsl == value) return;
+                _useSsl = value;
+                RaisePropertyChanged("UseSsl");
+            }
+        }
+
+        #endregion bool UseSsl
     }
 }

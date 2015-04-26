@@ -1,19 +1,34 @@
 ﻿<Window x:Class="NeoBrowser.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Neo browser" Height="350" Width="525">
+        xmlns:vm="clr-namespace:NeoBrowser.ViewModels"
+        Title="Neo browser">
     <Window.DataContext>
         <vm:MainWindow_ViewModel />
     </Window.DataContext>
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="MinWidth" Value="80" />
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Border Background="SteelBlue">
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-            <TextBox
-        </StackPanel>
+        <Border Background="SteelBlue" Padding="5">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock>Host</TextBlock>
+                <TextBox Text="{Binding Host}"/>
+                <TextBlock>Port</TextBlock>
+                <TextBox Text="{Binding Port}"/>
+                <TextBlock>User</TextBlock>
+                <TextBox Text="{Binding User}"/>
+                <TextBlock>Password</TextBlock>
+                <TextBox Text="{Binding Password}"/>
+                <CheckBox IsChecked="{Binding UseSsl}" VerticalAlignment="Center">Use SSL</CheckBox>
+                <Button Command="{Binding ConnectCommand}">Connect</Button>
+            </StackPanel>
         </Border>
     </Grid>
 </Window>
