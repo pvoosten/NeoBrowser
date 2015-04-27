@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace NeoBrowser.ViewModels
@@ -41,9 +42,10 @@ namespace NeoBrowser.ViewModels
 
         private void Connect()
         {
-            Browser = new GraphBrowser(Host, Port, User, Password, UseSsl);
-            Browser.GoToNode(1);
+            GraphBrowser.Instance.Connect(Host, Port, User, Password, UseSsl);
+            CollapsedWhenConnected = Visibility.Collapsed;
         }
+
         #region string Host
 
         private string _host;
@@ -134,5 +136,25 @@ namespace NeoBrowser.ViewModels
         }
 
         #endregion bool UseSsl
+
+        #region Visibility CollapsedWhenConnected
+
+        private Visibility _collapsedWhenConnected = Visibility.Visible;
+        public Visibility CollapsedWhenConnected
+        {
+            get
+            {
+                return _collapsedWhenConnected;
+            }
+            set
+            {
+                if (_collapsedWhenConnected == value) return;
+                _collapsedWhenConnected = value;
+                RaisePropertyChanged("CollapsedWhenConnected");
+            }
+        }
+
+        #endregion Visibility CollapsedWhenConnected
+
     }
 }

@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:NeoBrowser.ViewModels"
+        xmlns:my="clr-namespace:NeoBrowser.Views"
         Title="Neo browser">
     <Window.DataContext>
         <vm:MainWindow_ViewModel />
@@ -16,7 +17,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Border Background="SteelBlue" Padding="5">
+        <Border Background="SteelBlue" Padding="5" Visibility="{Binding CollapsedWhenConnected}">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock>Host</TextBlock>
                 <TextBox Text="{Binding Host}"/>
@@ -30,5 +31,18 @@
                 <Button Command="{Binding ConnectCommand}">Connect</Button>
             </StackPanel>
         </Border>
+        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="453" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="740">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Menu>
+                    <my:LabelsMenu />
+                </Menu>
+
+            </Grid>
+        </Border>
+
     </Grid>
 </Window>
