@@ -7,6 +7,7 @@ using CypherNet.Core;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json.Linq;
 
 namespace NeoBrowser
 {
@@ -20,7 +21,8 @@ namespace NeoBrowser
 
         }
 
-        static GraphBrowser() {
+        static GraphBrowser()
+        {
             Instance = new GraphBrowser();
         }
 
@@ -65,7 +67,8 @@ namespace NeoBrowser
             return _store.GetClient();
         }
 
-        public async Task<IEnumerable<string>> GetAllLabelsAsync(){
+        public async Task<IEnumerable<string>> GetAllLabelsAsync()
+        {
             var reader = await Query(@"
                 MATCH (n) 
                 WITH DISTINCT labels(n) as lbls 
@@ -98,6 +101,42 @@ namespace NeoBrowser
             {
                 string s = reader.Get<string>(0);
                 Console.WriteLine(s);
+            }
+        }
+
+        internal IEnumerable<int> GetNodesWithLabel(string label)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void LoadNodeWithId(int nodeId)
+        {
+            string cypher = @"
+                            match (n)-[conn]-(a)
+                            where id(n) = {nodeId}
+                            return n,conn,a, type(conn), labels(a),startnode(conn)=n as outgoing
+                            order by type(conn), labels(a)
+                            ".Replace("{nodeId}", nodeId.ToString()); // TODO: is there support for query parameters in CypherNet.Core?
+            Query(cypher).ContinueWith(t =>
+            {
+                NodeLoadedEventArgs args = new NodeLoadedEventArgs();
+                var reader = t.Result;
+                while (reader.Read())
+                {
+                    args.Node = args.Node ?? reader.Get<JObject>(0);
+                    // add connections etc.
+                }
+                FireNodeLoaded(args);
+            });
+        }
+
+        public event EventHandler<NodeLoadedEventArgs> NodeLoaded;
+
+        private void FireNodeLoaded(NodeLoadedEventArgs args)
+        {
+            if (NodeLoaded != null)
+            {
+                NodeLoaded(this, args);
             }
         }
     }
