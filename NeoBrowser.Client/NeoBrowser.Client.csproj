@@ -57,6 +57,7 @@
   <ItemGroup>
     <Compile Include="CypherParameter.cs" />
     <Compile Include="CypherResult.cs" />
+    <Compile Include="CypherResultRow.cs" />
     <Compile Include="CypherStatement.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="GraphDatabase.cs" />
