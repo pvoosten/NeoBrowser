@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CypherNet.Core;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
