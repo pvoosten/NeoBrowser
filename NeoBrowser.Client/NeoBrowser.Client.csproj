@@ -59,9 +59,16 @@
     <Compile Include="CypherResult.cs" />
     <Compile Include="CypherResultRow.cs" />
     <Compile Include="CypherStatement.cs" />
+    <Compile Include="CypherTransaction.cs" />
+    <Compile Include="Direction.cs" />
     <Compile Include="Exceptions.cs" />
     <Compile Include="GraphDatabase.cs" />
+    <Compile Include="Node.cs" />
+    <Compile Include="NodeMetadata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Relationship.cs" />
+    <Compile Include="RelationshipMetadata_2.cs" />
+    <Compile Include="RestConnection.cs" />
     <Compile Include="ServiceRoot.cs" />
   </ItemGroup>
   <ItemGroup>

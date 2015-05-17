@@ -7,42 +7,5 @@
     <Window.DataContext>
         <vm:MainWindow_ViewModel />
     </Window.DataContext>
-    <Window.Resources>
-        <Style TargetType="TextBox">
-            <Setter Property="MinWidth" Value="80" />
-        </Style>
-    </Window.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Border Background="SteelBlue" Padding="5" Visibility="{Binding CollapsedWhenConnected}">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock>Host</TextBlock>
-                <TextBox Text="{Binding Host}"/>
-                <TextBlock>Port</TextBlock>
-                <TextBox Text="{Binding Port}"/>
-                <TextBlock>User</TextBlock>
-                <TextBox Text="{Binding User}"/>
-                <TextBlock>Password</TextBlock>
-                <TextBox Text="{Binding Password}"/>
-                <CheckBox IsChecked="{Binding UseSsl}" VerticalAlignment="Center">Use SSL</CheckBox>
-                <Button Command="{Binding ConnectCommand}">Connect</Button>
-            </StackPanel>
-        </Border>
-        <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="453" Margin="10,10,0,0" Grid.Row="1" VerticalAlignment="Top" Width="740">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Menu>
-                    <my:LabelsMenu />
-                </Menu>
-
-            </Grid>
-        </Border>
-
-    </Grid>
+    <my:Browser DataContext="Browser" />
 </Window>

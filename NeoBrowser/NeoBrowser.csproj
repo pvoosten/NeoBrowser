@@ -90,13 +90,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="GraphBrowser.cs" />
-    <Compile Include="NodeLoadedEventArgs.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="ViewModels\LabelsMenu_ViewModel.cs" />
+    <Compile Include="ViewModels\Browser_ViewModel.cs" />
     <Compile Include="ViewModels\MainWindow_ViewModel.cs" />
-    <Compile Include="Views\LabelsMenu.xaml.cs">
-      <DependentUpon>LabelsMenu.xaml</DependentUpon>
+    <Compile Include="Views\Browser.xaml.cs">
+      <DependentUpon>Browser.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -110,7 +107,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\LabelsMenu.xaml">
+    <Page Include="Views\Browser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

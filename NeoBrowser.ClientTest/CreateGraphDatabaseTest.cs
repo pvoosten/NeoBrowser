@@ -76,5 +76,33 @@ namespace NeoBrowser.ClientTest
             ", new CypherParameter("alpha", "alphaValue"));
             await gdb.ExecuteCypherStatements(stmt);
         }
+
+        [Test]
+        public async void GetAllPropertiesTest()
+        {
+            var keys = await TestUtil.GetGraphDb().GetAllPropertyKeys();
+            Assert.Contains("name", keys);
+        }
+
+        [Test]
+        public async void CreateNodeAndGetNodeWithId()
+        {
+            var gdb = TestUtil.GetGraphDb();
+            var node = await gdb.CreateNode();
+            var labels = await node.GetLabels();
+            ulong id = node.Metadata.Id;
+            var sameNode = await gdb.GetNodeWithId(id);
+            Assert.AreEqual(node.Metadata.Labels, sameNode.Metadata.Labels);
+        }
+
+        [Test,ExpectedException(typeof(GraphDatabaseException))]
+        public async void GetNonExistentNode()
+        {
+            var gdb = TestUtil.GetGraphDb();
+            await gdb.GetNodeWithId(5555555);
+        }
+
+
+
     }
 }

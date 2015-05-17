@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NeoBrowser.Client;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,5 +12,14 @@ namespace NeoBrowser.ClientTest
         public const string URL = "http://localhost:7474";
         public const string USER = "neo4j";
         public const string PASSWORD = "longbow";
+
+        public static GraphDatabase GetGraphDb(bool authenticate = true)
+        {
+            var gdb = new GraphDatabase(TestUtil.URL);
+            if(authenticate)
+                gdb.Authenticate(TestUtil.USER, TestUtil.PASSWORD);
+            return gdb;
+        }
+
     }
 }

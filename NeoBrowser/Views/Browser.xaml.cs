@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace NeoBrowser.Views
 {
     /// <summary>
-    /// Interaction logic for LabelsMenu.xaml
+    /// Interaction logic for Browser.xaml
     /// </summary>
-    public partial class LabelsMenu : MenuItem
+    public partial class Browser : UserControl
     {
-        public LabelsMenu()
+        public Browser()
         {
             InitializeComponent();
         }

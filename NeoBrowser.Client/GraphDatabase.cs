@@ -13,20 +13,10 @@ namespace NeoBrowser.Client
     public class GraphDatabase
     {
 
-        private readonly Uri _managementUri;
-        private readonly Uri _dataUri;
-        private ServiceRoot _serviceRoot;
-        private string _username;
-        private string _password;
+        private RestConnection _connection;
 
-        public GraphDatabase(Uri graphEndpoint)
+        public GraphDatabase(Uri graphEndpoint): this(new RestConnection(graphEndpoint))
         {
-            HttpClient client = new HttpClient();
-            var response = client.GetAsync(graphEndpoint.AbsoluteUri).Result.Content.ReadAsStringAsync().Result;
-            var res = new { management = "", data = "" };
-            res = JsonConvert.DeserializeAnonymousType(response, res);
-            _managementUri = new Uri(res.management);
-            _dataUri = new Uri(res.data);
         }
 
         public GraphDatabase(string graphEndpoint)
@@ -34,111 +24,40 @@ namespace NeoBrowser.Client
         {
         }
 
+        internal GraphDatabase(RestConnection restConnection)
+        {
+            _connection = restConnection;
+        }
+
         public async Task<string> GetDatabaseVersion()
         {
-            using (var client = CreateHttpClient())
-            {
-                var serviceRoot = await GetServiceRoot(client);
-                return serviceRoot.neo4j_version;
-            }
+            return await _connection.GetDatabaseVersion();
         }
 
-        private async Task<ServiceRoot> GetServiceRoot(HttpClient client)
-        {
-            _serviceRoot = _serviceRoot ?? await GetServiceRootImpl(client);
-            return _serviceRoot;
-        }
-
-        private async Task<ServiceRoot> GetServiceRootImpl(HttpClient client)
-        {
-            var response = await client.GetAsync(_dataUri.AbsoluteUri);
-            return await ReceiveJsonContent<ServiceRoot>(response);
-        }
-
-        private HttpClient CreateHttpClient()
-        {
-            HttpClient client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.AcceptCharset.Add(new System.Net.Http.Headers.StringWithQualityHeaderValue("UTF-8"));
-            client.DefaultRequestHeaders.Add("X-stream", "true");
-            if (_username != null)
-            {
-                var bytes = Encoding.UTF8.GetBytes(string.Format("{0}:{1}", _username, _password));
-                string base64AuthenticationString = Convert.ToBase64String(bytes);
-                client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", base64AuthenticationString);
-            }
-            return client;
-        }
-
-        private HttpContent JsonContent(object o)
-        {
-            var content = new StringContent(JsonConvert.SerializeObject(o));
-            content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-            return content;
-        }
-
-        /// <summary>
-        /// Creates an http stream content object based on the json serialization of the given .NET object.
-        /// </summary>
-        /// <param name="o">The object to serialize into the http stream</param>
-        /// <returns>the http stream content</returns>
-        private async Task<T> ReceiveJsonContent<T>(HttpResponseMessage response)
-        {
-            if (response.IsSuccessStatusCode)
-            {
-                return await ReceiveJsonContentImpl<T>(response);
-            }
-            else
-            {
-                JObject o = await ReceiveJsonContentImpl<JObject>(response);
-                if (o != null)
-                {
-                    throw new GraphDatabaseException(o["errors"][0]["message"].ToString()) { StatusCode = o["errors"][0]["code"].ToString() };
-                }
-                else
-                {
-                    throw new GraphDatabaseException(response.StatusCode + " " + response.ReasonPhrase);
-                }
-            }
-        }
-
-        private static async Task<T> ReceiveJsonContentImpl<T>(HttpResponseMessage response)
-        {
-            string jsonContent = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<T>(jsonContent);
-        }
 
         public async Task<IEnumerable<CypherResult>> ExecuteCypherStatements(params CypherStatement[] statements)
         {
-            using (var client = CreateHttpClient())
+            if (statements == null || statements.Length == 0)
             {
-                var content = new { statements = statements.Select(stmt => stmt.PrepareToSend()) };
-                var root = await this.GetServiceRoot(client);
-                var response = await client.PostAsync(root.transaction.AbsoluteUri + "/commit", JsonContent(content));
-                var json = await ReceiveJsonContent<JObject>(response);
-                return WrapResults(json, statements);
+                return Enumerable.Empty<CypherResult>();
             }
+            return await _connection.ExecuteCypherStatements(statements);
         }
 
-        private IEnumerable<CypherResult> WrapResults(JObject json, CypherStatement[] statements)
+        /// <summary>
+        /// Starts a new transaction
+        /// </summary>
+        /// <param name="forceCreation">if true, the transaction is started without statements being sent. Else, it is lazily created along with the first transaction statement.</param>
+        /// <returns>The transaction</returns>
+        public CypherTransaction BeginTransaction(bool forceCreation = false)
         {
-            var exceptions = json["exceptions"];
-            if (exceptions != null && json["exceptions"].Count() > 0)
-            {
-                throw new GraphDatabaseException(exceptions[0]["message"].ToString()) { StatusCode = exceptions[0]["message"].ToString() };
-            }
-            var results = json["results"];
-            int i = 0;
-            foreach (JObject res in results)
-            {
-                var rowdata = res["data"].Select(d => new CypherResultRow(d["row"]));
-                var columns = res["columns"].Select(c => c.Value<string>()).ToArray();
-                yield return new CypherResult(
-                    statements[i++],
-                    columns,
-                    rowdata);
-            }
+            // the REST API supports sending statements at the start of a transaction.
+            // Instead of using those semantics, we use SRP here and allow
+            // sending statements only from within the transaction.
+            // behind the scenes, the transaction is still only created when the first statement is sent.
+            // That way, it is possible to fail on commit or rollbac, if no statements have been sent.
+            return new CypherTransaction(_connection, forceCreation);
+
         }
 
         /// <summary>
@@ -149,9 +68,32 @@ namespace NeoBrowser.Client
         /// <returns>this, for chaining with the constructor</returns>
         public GraphDatabase Authenticate(string username, string password)
         {
-            _username = username;
-            _password = password;
+            _connection.Authenticate(username, password);
             return this;
         }
+
+
+        /// <summary>
+        ///  list all property keys ever used in the database. This includes and property keys you have used, but deleted.
+        ///  
+        /// There is currently no way to tell which ones are in use and which ones are not, short of walking the entire set of properties in the database.
+        /// </summary>
+        /// <returns>all property keys used in the database</returns>
+        public async Task<List<string>> GetAllPropertyKeys()
+        {
+            return await _connection.GetAllPropertyKeys();
+        }
+
+        public async Task<Node> CreateNode(JObject properties = null)
+        {
+            return await _connection.CreateNode(properties);
+        }
+
+        public async Task<Node> GetNodeWithId(ulong id)
+        {
+            return await _connection.GetNodeWithId(id);
+        }
+
+
     }
 }
