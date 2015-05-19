@@ -3,18 +3,130 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:vm="clr-namespace:NeoBrowser.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance Type=vm:Browser_ViewModel}">
+    <UserControl.Resources>
+        <DataTemplate x:Key="relTpl">
+            <TextBlock Text="{Binding Type}" ToolTip="{Binding PropertiesAsJsonText}" />
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="1000">
             <TextBlock>Node id</TextBlock>
+
             <TextBox Text="{Binding NodeId}" Width="100" Name="txtNodeId" />
+            <StackPanel>
+                <Button Height="12" Width="18" Command="{Binding IncrementNodeIdCommand}">^</Button>
+                <Button Height="12" Command="{Binding DecrementNodeIdCommand}">v</Button>
+            </StackPanel>
             <Button Command="{Binding LoadNodeWithIdCommand}" CommandParameter="{Binding ElementName=txtNodeId,Path=Text}" Content="Laden"/>
         </StackPanel>
-        
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="2"
+            Text="Node" />
+        <ListBox
+            Grid.Row="2"
+            Grid.Column="2"
+            ItemsSource="{Binding ActiveNode.Labels}" />
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="1"
+            Text="Incoming relationships" />
+        <ListBox
+            Name="lstIncoming"
+            Grid.Row="2"
+            Grid.Column="1"
+            ItemsSource="{Binding ActiveNode.IncomingRelationships}"
+            ItemTemplate="{StaticResource relTpl}"
+            />
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="3"
+            Text="Outgoing relationships" />
+        <ListBox
+            Name="lstOutgoing"
+            Grid.Row="2"
+            Grid.Column="3"
+            ItemsSource="{Binding ActiveNode.OutgoingRelationships}"
+            ItemTemplate="{StaticResource relTpl}"
+            />
+
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="1"
+            Text="Relationship properties"
+            />
+        <TextBlock
+            Grid.Row="4"
+            Grid.Column="1"
+            Text="{Binding ElementName=lstIncoming, Path=SelectedValue.PropertiesJsonText}"
+            />
+
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="2"
+            Text="Node properties"
+            />
+        <TextBlock
+            Grid.Row="4"
+            Grid.Column="2"
+            Text="{Binding ActiveNode.PropertiesJsonText}"
+            />
+
+
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="3"
+            Text="Relationship properties"
+            />
+        <TextBlock
+            Grid.Row="4"
+            Grid.Column="3"
+            Text="{Binding ElementName=lstOutgoing, Path=SelectedValue.PropertiesJsonText}"
+            />
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="0"
+            Text="Incoming connected node"
+            />
+        <ListBox
+            Grid.Row="2"
+            Grid.Column="0"
+            DataContext="{Binding ElementName=lstIncoming, Path=SelectedValue}"
+            ItemsSource="{Binding SourceNode}"
+            />
+
+
+        <TextBlock
+            Grid.Row="1"
+            Grid.Column="4"
+            Text="Outgoing connected node"
+            />
+        <ListBox
+            Grid.Row="2"
+            Grid.Column="4"
+            DataContext="{Binding ElementName=lstOutgoing, Path=SelectedValue}"
+            ItemsSource="{Binding TargetNode}"
+            />
+
     </Grid>
 </UserControl>

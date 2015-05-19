@@ -92,6 +92,8 @@
     </ApplicationDefinition>
     <Compile Include="ViewModels\Browser_ViewModel.cs" />
     <Compile Include="ViewModels\MainWindow_ViewModel.cs" />
+    <Compile Include="ViewModels\Node_ViewModel.cs" />
+    <Compile Include="ViewModels\Relationship_ViewModel.cs" />
     <Compile Include="Views\Browser.xaml.cs">
       <DependentUpon>Browser.xaml</DependentUpon>
     </Compile>
@@ -140,7 +142,12 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\NeoBrowser.Client\NeoBrowser.Client.csproj">
+      <Project>{a9cedb98-2e85-4c82-9b6f-955476be0616}</Project>
+      <Name>NeoBrowser.Client</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

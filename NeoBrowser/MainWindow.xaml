@@ -7,5 +7,5 @@
     <Window.DataContext>
         <vm:MainWindow_ViewModel />
     </Window.DataContext>
-    <my:Browser DataContext="Browser" />
+    <my:Browser DataContext="{Binding Browser}" />
 </Window>
