@@ -78,7 +78,13 @@ namespace NeoBrowser.Client
                         throw new GraphDatabaseException("Unknown direction: " + direction);
                 }
             }
-            return await Connection.Get<List<Relationship>>(url);
+            var rels = await Connection.Get<List<Relationship>>(url);
+            foreach (var rel in rels)
+            {
+                rel.Connection = Connection;
+            }
+            return rels;
+
         }
 
         [JsonProperty("self")]

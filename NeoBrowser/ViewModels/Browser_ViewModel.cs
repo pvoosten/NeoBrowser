@@ -21,6 +21,7 @@ namespace NeoBrowser.ViewModels
             LoadNodeWithIdCommand = new RelayCommand(LoadNodeWithId, LoadNodeWithIdEnabled);
             IncrementNodeIdCommand = new RelayCommand(IncrementNodeId, IncrementNodeIdEnabled);
             DecrementNodeIdCommand = new RelayCommand(DecrementNodeId, DecrementNodeIdEnabled);
+            ActivateNodeCommand = new RelayCommand<Node_ViewModel>(ActivateNode, ActivateNodeEnabled);
         }
 
         #region ulong NodeId
@@ -58,7 +59,6 @@ namespace NeoBrowser.ViewModels
 
         #endregion IncrementNodeId command
 
-
         #region DecrementNodeId command
         public ICommand DecrementNodeIdCommand { get; private set; }
 
@@ -73,6 +73,23 @@ namespace NeoBrowser.ViewModels
         }
 
         #endregion DecrementNodeId command
+
+
+        #region ActivateNode command
+        public ICommand ActivateNodeCommand { get; private set; }
+
+        private void ActivateNode(Node_ViewModel node)
+        {
+            ActiveNode = node;
+        }
+
+        private bool ActivateNodeEnabled(Node_ViewModel node)
+        {
+            return node != null;
+        }
+
+        #endregion ActivateNode command
+
 
         #region LoadNodeWithId command
         public ICommand LoadNodeWithIdCommand { get; private set; }

@@ -4,12 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vm="clr-namespace:NeoBrowser.ViewModels"
+             xmlns:prop="clr-namespace:Xceed.Wpf.Toolkit.PropertyGrid;assembly=Xceed.Wpf.Toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type=vm:Browser_ViewModel}">
     <UserControl.Resources>
         <DataTemplate x:Key="relTpl">
-            <TextBlock Text="{Binding Type}" ToolTip="{Binding PropertiesAsJsonText}" />
+            <TextBlock Text="{Binding Type}" ToolTip="{Binding PropertiesJsonText}" />
         </DataTemplate>
     </UserControl.Resources>
     <Grid>
@@ -108,12 +109,26 @@
             Grid.Column="0"
             Text="Incoming connected node"
             />
-        <ListBox
+        <Grid
             Grid.Row="2"
             Grid.Column="0"
+            >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ListBox
             DataContext="{Binding ElementName=lstIncoming, Path=SelectedValue}"
-            ItemsSource="{Binding SourceNode}"
+            ItemsSource="{Binding StartNode.Labels}"
             />
+            <Button
+                Grid.Row="1"
+                Command="{Binding ActivateNodeCommand}"
+                CommandParameter="{Binding ElementName=lstIncoming,Path=SelectedValue.StartNode}"
+                >
+                &gt;&gt;&gt;
+            </Button>
+        </Grid>
 
 
         <TextBlock
@@ -121,12 +136,95 @@
             Grid.Column="4"
             Text="Outgoing connected node"
             />
-        <ListBox
+        <Grid
             Grid.Row="2"
             Grid.Column="4"
+            >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <ListBox
             DataContext="{Binding ElementName=lstOutgoing, Path=SelectedValue}"
-            ItemsSource="{Binding TargetNode}"
+            ItemsSource="{Binding EndNode.Labels}"
             />
+            <Button
+                Grid.Row="1"
+                Command="{Binding ActivateNodeCommand}"
+                CommandParameter="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode}"
+                Content="&lt;&lt;&lt;"
+                >
+            </Button>
+
+        </Grid>
+
+
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="0"
+            Text="Node properties"
+            />
+        <TextBlock
+            Grid.Row="4"
+            Grid.Column="0"
+            Text="{Binding ElementName=lstIncoming,Path=SelectedValue.StartNode.PropertiesJsonText}"
+            />
+
+
+        <TextBlock
+            Grid.Row="3"
+            Grid.Column="4"
+            Text="Node properties"
+            />
+        <ListView
+            Grid.Row="4"
+            Grid.Column="2"
+            ItemsSource="{Binding ActiveNode.Properties}"
+            
+            >
+            <ListView.View>
+                <GridView>
+                    <GridView.ColumnCollection>
+                        <GridViewColumnCollection>
+                            <GridViewColumn
+                                Header="Key"
+                                Width="100"
+                                >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="Binding Key" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn
+                                Header="Key"
+                                Width="100"
+                                >
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="Binding Value" />
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridViewColumnCollection>
+                    </GridView.ColumnCollection>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <prop:PropertyGrid
+            Grid.Row="4"
+            Grid.Column="4"
+            DataContext="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode.Properties}"
+            SelectedObject="{Binding}"
+            
+            AutoGenerateProperties="True"
+            />
+        <TextBlock
+            Grid.Row="4"
+            Grid.Column="4"
+            Text="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode.PropertiesJsonText}"
+            />
+
 
     </Grid>
 </UserControl>

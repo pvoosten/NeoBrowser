@@ -1,8 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
@@ -19,6 +21,11 @@ namespace NeoBrowser.ViewModels
             if (IsInDesignMode)
             {
                 Labels = new List<string> { "Alpha", "Beta", "Gaga" };
+                dynamic d = new ExpandoObject();
+                d.Alpha = "alpha property";
+                d.Beta = "beta property";
+                d.Gamma = "Gamma property";
+                Properties = d;
             }
         }
 
@@ -26,7 +33,10 @@ namespace NeoBrowser.ViewModels
             : this()
         {
             _node = node;
-            PropertiesAsJsonText = node.Properties.ToString(Formatting.Indented);
+            PropertiesJsonText = node.Properties.ToString(Formatting.Indented);
+            var serializer = JsonSerializer.CreateDefault();
+            serializer.Converters.Add(new ExpandoObjectConverter());
+            Properties = node.Properties.ToObject<ExpandoObject>(serializer);
             DeleteCommand = new RelayCommand(Delete, DeleteEnabled);
             _deleted = false;
             Init();
@@ -40,9 +50,10 @@ namespace NeoBrowser.ViewModels
             IncomingRelationships = (await incomingRelationships).Select(r => new Relationship_ViewModel(r)).ToList();
             OutgoingRelationships = (await outgoingRelationships).Select(r => new Relationship_ViewModel(r)).ToList();
             Labels = await labels;
+            Id = _node.Metadata.Id;
         }
 
-        public string PropertiesAsJsonText { get; private set; }
+        public string PropertiesJsonText { get; private set; }
 
         #region Delete command
         public ICommand DeleteCommand { get; private set; }
@@ -59,6 +70,25 @@ namespace NeoBrowser.ViewModels
         }
 
         #endregion Delete command
+
+        #region ulong Id
+
+        private ulong _id;
+        public ulong Id
+        {
+            get
+            {
+                return _id;
+            }
+            set
+            {
+                if (_id == value) return;
+                _id = value;
+                RaisePropertyChanged("Id");
+            }
+        }
+
+        #endregion ulong Id
 
         #region List<string> Labels
 
@@ -78,6 +108,26 @@ namespace NeoBrowser.ViewModels
         }
 
         #endregion List<string> Labels
+
+        #region ExpandoObject Properties
+
+        private ExpandoObject _properties;
+        public ExpandoObject Properties
+        {
+            get
+            {
+                return _properties;
+            }
+            set
+            {
+                if (_properties == value) return;
+                _properties = value;
+                RaisePropertyChanged("Properties");
+            }
+        }
+
+        #endregion ExpandoObject Properties
+
 
         #region List<Relationship_ViewModel> IncomingRelationships
 

@@ -28,7 +28,14 @@ namespace NeoBrowser.Client
 
         public async Task<Node> GetStartNode()
         {
-            return await Connection.Get<Node>(_startUri);
+            return await GetNode(_startUri);
+        }
+
+        private async Task<Node> GetNode(string uri)
+        {
+            var node = await Connection.Get<Node>(uri);
+            node.Connection = Connection;
+            return node;
         }
 
         // http://localhost:7474/db/data/relationship/13/properties/{key}
@@ -85,7 +92,7 @@ namespace NeoBrowser.Client
 
         public async Task<Node> GetEndNode()
         {
-            return await Connection.Get<Node>(_endUri);
+            return await GetNode(_endUri);
         }
 
         [JsonProperty("metadata")]
