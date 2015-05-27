@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:my="clr-namespace:NeoBrowser.Views"
              xmlns:vm="clr-namespace:NeoBrowser.ViewModels"
              xmlns:prop="clr-namespace:Xceed.Wpf.Toolkit.PropertyGrid;assembly=Xceed.Wpf.Toolkit"
              mc:Ignorable="d" 
@@ -75,10 +76,10 @@
             Grid.Column="1"
             Text="Relationship properties"
             />
-        <TextBlock
+        <my:PropertiesViewer
             Grid.Row="4"
             Grid.Column="1"
-            Text="{Binding ElementName=lstIncoming, Path=SelectedValue.PropertiesJsonText}"
+            DataContext="{Binding ElementName=lstIncoming, Path=SelectedValue.Properties}"
             />
 
         <TextBlock
@@ -86,10 +87,10 @@
             Grid.Column="2"
             Text="Node properties"
             />
-        <TextBlock
+        <my:PropertiesViewer
             Grid.Row="4"
             Grid.Column="2"
-            Text="{Binding ActiveNode.PropertiesJsonText}"
+            DataContext="{Binding ActiveNode.Properties}"
             />
 
 
@@ -98,10 +99,10 @@
             Grid.Column="3"
             Text="Relationship properties"
             />
-        <TextBlock
+        <my:PropertiesViewer
             Grid.Row="4"
             Grid.Column="3"
-            Text="{Binding ElementName=lstOutgoing, Path=SelectedValue.PropertiesJsonText}"
+            DataContext="{Binding ElementName=lstOutgoing, Path=SelectedValue.Properties}"
             />
 
         <TextBlock
@@ -164,10 +165,10 @@
             Grid.Column="0"
             Text="Node properties"
             />
-        <TextBlock
+        <my:PropertiesViewer
             Grid.Row="4"
             Grid.Column="0"
-            Text="{Binding ElementName=lstIncoming,Path=SelectedValue.StartNode.PropertiesJsonText}"
+            DataContext="{Binding ElementName=lstIncoming,Path=SelectedValue.StartNode.Properties}"
             />
 
 
@@ -176,53 +177,16 @@
             Grid.Column="4"
             Text="Node properties"
             />
-        <ListView
-            Grid.Row="4"
-            Grid.Column="2"
-            ItemsSource="{Binding ActiveNode.Properties}"
-            
-            >
-            <ListView.View>
-                <GridView>
-                    <GridView.ColumnCollection>
-                        <GridViewColumnCollection>
-                            <GridViewColumn
-                                Header="Key"
-                                Width="100"
-                                >
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="Binding Key" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn
-                                Header="Key"
-                                Width="100"
-                                >
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="Binding Value" />
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridViewColumnCollection>
-                    </GridView.ColumnCollection>
-                </GridView>
-            </ListView.View>
-        </ListView>
         <prop:PropertyGrid
             Grid.Row="4"
             Grid.Column="4"
             DataContext="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode.Properties}"
             SelectedObject="{Binding}"
-            
-            AutoGenerateProperties="True"
             />
-        <TextBlock
+        <my:PropertiesViewer
             Grid.Row="4"
             Grid.Column="4"
-            Text="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode.PropertiesJsonText}"
+            DataContext="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode.Properties}"
             />
 
 

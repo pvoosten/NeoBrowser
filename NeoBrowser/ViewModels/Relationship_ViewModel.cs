@@ -1,7 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 
@@ -15,6 +18,9 @@ namespace NeoBrowser.ViewModels
         {
             _rel = rel;
             PropertiesJsonText = _rel.Properties.ToString(Formatting.Indented);
+            var serializer = JsonSerializer.CreateDefault();
+            serializer.Converters.Add(new ExpandoObjectConverter());
+            Properties = rel.Properties.ToObject<ExpandoObject>(serializer);
         }
 
         public string Type
@@ -26,6 +32,25 @@ namespace NeoBrowser.ViewModels
         }
 
         public string PropertiesJsonText { get; private set; }
+
+        #region ExpandoObject Properties
+
+        private ExpandoObject _properties;
+        public ExpandoObject Properties
+        {
+            get
+            {
+                return _properties;
+            }
+            set
+            {
+                if (_properties == value) return;
+                _properties = value;
+                RaisePropertyChanged("Properties");
+            }
+        }
+
+        #endregion ExpandoObject Properties
 
         #region Node_ViewModel StartNode
 
