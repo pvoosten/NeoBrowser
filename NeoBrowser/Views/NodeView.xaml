@@ -10,7 +10,7 @@
              d:DataContext="{d:DesignInstance Type=vm:Node_ViewModel, IsDesignTimeCreatable=True}">
     <StackPanel>
         <Border Background="LightBlue" CornerRadius="10,10,0,0">
-            <Expander Header="Labels" IsExpanded="True" Padding="10">
+            <Expander Header="Labels" IsExpanded="True" Padding="10" Name="lbls">
                 <StackPanel>
                     <ItemsControl ItemsSource="{Binding Labels}">
                         <ItemsControl.ItemTemplate>
@@ -24,7 +24,7 @@
                                         <Button
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Center"
-                                        Command="{Binding RemoveLabelCommand}"
+                                        Command="{Binding ElementName=lbls, Path=DataContext.RemoveLabelCommand}"
                                         CommandParameter="{Binding}">X</Button>
                                     </Grid>
                                 </Border>

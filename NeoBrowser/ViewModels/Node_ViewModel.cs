@@ -181,7 +181,7 @@ namespace NeoBrowser.ViewModels
 
         private bool RemoveLabelEnabled(string param)
         {
-            throw new NotImplementedException("RemoveLabel command not yet implemented");
+            return true;
         }
 
         #endregion RemoveLabel command
