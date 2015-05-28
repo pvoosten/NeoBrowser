@@ -43,10 +43,11 @@
             Grid.Row="1"
             Grid.Column="2"
             Text="Node" />
-        <ListBox
+        <my:NodeView
             Grid.Row="2"
             Grid.Column="2"
-            ItemsSource="{Binding ActiveNode.Labels}" />
+            Grid.RowSpan="3"
+            DataContext="{Binding ActiveNode}" />
         <TextBlock
             Grid.Row="1"
             Grid.Column="1"
@@ -82,16 +83,6 @@
             DataContext="{Binding ElementName=lstIncoming, Path=SelectedValue.Properties}"
             />
 
-        <TextBlock
-            Grid.Row="3"
-            Grid.Column="2"
-            Text="Node properties"
-            />
-        <my:PropertiesViewer
-            Grid.Row="4"
-            Grid.Column="2"
-            DataContext="{Binding ActiveNode.Properties}"
-            />
 
 
         <TextBlock
@@ -110,85 +101,38 @@
             Grid.Column="0"
             Text="Incoming connected node"
             />
-        <Grid
-            Grid.Row="2"
-            Grid.Column="0"
-            >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <ListBox
-            DataContext="{Binding ElementName=lstIncoming, Path=SelectedValue}"
-            ItemsSource="{Binding StartNode.Labels}"
-            />
-            <Button
+        <Button
                 Grid.Row="1"
                 Command="{Binding ActivateNodeCommand}"
                 CommandParameter="{Binding ElementName=lstIncoming,Path=SelectedValue.StartNode}"
                 >
-                &gt;&gt;&gt;
-            </Button>
-        </Grid>
-
+            &gt;&gt;&gt;
+        </Button>
 
         <TextBlock
             Grid.Row="1"
             Grid.Column="4"
             Text="Outgoing connected node"
             />
-        <Grid
-            Grid.Row="2"
-            Grid.Column="4"
-            >
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>
-            <ListBox
-            DataContext="{Binding ElementName=lstOutgoing, Path=SelectedValue}"
-            ItemsSource="{Binding EndNode.Labels}"
-            />
-            <Button
+        <Button
                 Grid.Row="1"
+                Grid.Column="4"
                 Command="{Binding ActivateNodeCommand}"
                 CommandParameter="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode}"
                 Content="&lt;&lt;&lt;"
-                >
-            </Button>
-
-        </Grid>
+                />
 
 
-        <TextBlock
-            Grid.Row="3"
+
+        <my:NodeView
+            Grid.Row="2"
+            Grid.RowSpan="5"
             Grid.Column="0"
-            Text="Node properties"
-            />
-        <my:PropertiesViewer
-            Grid.Row="4"
-            Grid.Column="0"
-            DataContext="{Binding ElementName=lstIncoming,Path=SelectedValue.StartNode.Properties}"
+            DataContext="{Binding ElementName=lstIncoming,Path=SelectedValue.StartNode}"
             />
 
 
-        <TextBlock
-            Grid.Row="3"
-            Grid.Column="4"
-            Text="Node properties"
-            />
-        <prop:PropertyGrid
-            Grid.Row="4"
-            Grid.Column="4"
-            DataContext="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode.Properties}"
-            SelectedObject="{Binding}"
-            />
-        <my:PropertiesViewer
-            Grid.Row="4"
-            Grid.Column="4"
-            DataContext="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode.Properties}"
-            />
-
+        <my:NodeView Grid.Row="2" Grid.RowSpan="1000"  Grid.Column="4" DataContext="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode}" />
 
     </Grid>
 </UserControl>

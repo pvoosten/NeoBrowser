@@ -39,6 +39,8 @@ namespace NeoBrowser.ViewModels
             serializer.Converters.Add(new ExpandoObjectConverter());
             Properties = node.Properties.ToObject<ExpandoObject>(serializer);
             DeleteCommand = new RelayCommand(Delete, DeleteEnabled);
+            AddLabelCommand = new RelayCommand(AddLabel, AddLabelEnabled);
+            RemoveLabelCommand = new RelayCommand<string>(RemoveLabel, RemoveLabelEnabled);
             _deleted = false;
             Init();
         }
@@ -167,5 +169,58 @@ namespace NeoBrowser.ViewModels
         }
 
         #endregion List<Relationship_ViewModel> OutgoingRelationships
+
+
+        #region RemoveLabel command
+        public ICommand RemoveLabelCommand { get; private set; }
+
+        private void RemoveLabel(string param)
+        {
+            throw new NotImplementedException("RemoveLabel command not yet implemented");
+        }
+
+        private bool RemoveLabelEnabled(string param)
+        {
+            throw new NotImplementedException("RemoveLabel command not yet implemented");
+        }
+
+        #endregion RemoveLabel command
+
+
+        #region AddLabel command
+        public ICommand AddLabelCommand { get; private set; }
+
+        private void AddLabel()
+        {
+            throw new NotImplementedException("AddLabel command not yet implemented");
+        }
+
+        private bool AddLabelEnabled()
+        {
+            return !string.IsNullOrEmpty(AddLabelText) && (Labels==null || !Labels.Contains(AddLabelText));
+        }
+
+        #endregion AddLabel command
+
+
+        #region string AddLabelText
+
+        private string _addLabelText;
+        public string AddLabelText
+        {
+            get
+            {
+                return _addLabelText;
+            }
+            set
+            {
+                if (_addLabelText == value) return;
+                _addLabelText = value;
+                RaisePropertyChanged("AddLabelText");
+            }
+        }
+
+        #endregion string AddLabelText
+
     }
 }
