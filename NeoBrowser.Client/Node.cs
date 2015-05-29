@@ -113,7 +113,8 @@ namespace NeoBrowser.Client
                 to = toNode._selfUrl,
                 type = relType
             });
-            if(properties != null){
+            if (properties != null)
+            {
                 obj.Add("data", properties);
             }
             return await Connection.Post<Relationship>(_createRelationshipUrl, obj);
@@ -134,5 +135,19 @@ namespace NeoBrowser.Client
 
         [JsonProperty("data")]
         public JObject Properties { get; private set; }
+
+        public async Task RemoveLabel(string label)
+        {
+            string deleteUrl = string.Format("{0}/{1}", _labelsUrl, label);
+            await Connection.Delete(deleteUrl);
+        }
+
+        public async Task SetLabels(params string[] labels)
+        {
+            if (labels != null && labels.Length > 0)
+            {
+                await Connection.Post(_labelsUrl, labels);
+            }
+        }
     }
 }

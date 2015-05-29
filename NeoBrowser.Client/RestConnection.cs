@@ -216,5 +216,17 @@ namespace NeoBrowser.Client
         {
             return await Get<List<string>>(_dataUri.AbsoluteUri + "relationship/types");
         }
+
+        internal async Task Post(string url, object properties)
+        {
+            using (var client = CreateHttpClient())
+            {
+                var response = await client.PutAsync(url, JsonContent(properties));
+                if (!response.IsSuccessStatusCode)
+                {
+                    await ReceiveJsonContent<Node>(response);
+                }
+            }
+        }
     }
 }

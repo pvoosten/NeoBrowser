@@ -5,6 +5,7 @@ using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
@@ -21,7 +22,7 @@ namespace NeoBrowser.ViewModels
         {
             if (IsInDesignMode)
             {
-                Labels = new List<string> { "Alpha", "Beta", "Gaga" };
+                Labels = new ObservableCollection<string> { "Alpha", "Beta", "Gaga" };
                 dynamic d = new ExpandoObject();
                 d.Alpha = "alpha property";
                 d.Beta = "beta property";
@@ -52,7 +53,8 @@ namespace NeoBrowser.ViewModels
             var outgoingRelationships = _node.GetRelationShips(Client.Direction.Outgoing);
             IncomingRelationships = (await incomingRelationships).Select(r => new Relationship_ViewModel(r)).ToList();
             OutgoingRelationships = (await outgoingRelationships).Select(r => new Relationship_ViewModel(r)).ToList();
-            Labels = await labels;
+            var lbls = await labels;
+            Labels = new ObservableCollection<string>(lbls);
             Id = _node.Metadata.Id;
         }
 
@@ -95,8 +97,8 @@ namespace NeoBrowser.ViewModels
 
         #region List<string> Labels
 
-        private List<string> _labels;
-        public List<string> Labels
+        private ObservableCollection<string> _labels;
+        public ObservableCollection<string> Labels
         {
             get
             {
@@ -174,9 +176,17 @@ namespace NeoBrowser.ViewModels
         #region RemoveLabel command
         public ICommand RemoveLabelCommand { get; private set; }
 
-        private void RemoveLabel(string param)
+        private async void RemoveLabel(string param)
         {
-            throw new NotImplementedException("RemoveLabel command not yet implemented");
+            try
+            {
+                await _node.RemoveLabel(param);
+                Labels.Remove(param);
+            }
+            catch
+            {
+                // nothing happens
+            }
         }
 
         private bool RemoveLabelEnabled(string param)
@@ -190,14 +200,24 @@ namespace NeoBrowser.ViewModels
         #region AddLabel command
         public ICommand AddLabelCommand { get; private set; }
 
-        private void AddLabel()
+        private async void AddLabel()
         {
-            throw new NotImplementedException("AddLabel command not yet implemented");
+            try
+            {
+                string lbl = AddLabelText;
+                AddLabelText = "";
+                await _node.SetLabels(Labels.Union(new string[] { lbl }).ToArray());
+                Labels.Add(lbl);
+            }
+            catch
+            {
+                // nothing happens
+            }
         }
 
         private bool AddLabelEnabled()
         {
-            return !string.IsNullOrEmpty(AddLabelText) && (Labels==null || !Labels.Contains(AddLabelText));
+            return !string.IsNullOrEmpty(AddLabelText) && (Labels == null || !Labels.Contains(AddLabelText));
         }
 
         #endregion AddLabel command
