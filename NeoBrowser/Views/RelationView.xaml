@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="NeoBrowser.Views.RelationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:my="clr-namespace:NeoBrowser.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <DataTemplate x:Key="relTpl">
+            <TextBlock Text="{Binding Type}" ToolTip="{Binding PropertiesJsonText}" />
+        </DataTemplate>
+    </UserControl.Resources>
+    <StackPanel>
+        <Border Background="Green" CornerRadius="10,10,0,0">
+            <Expander Header="Relationships" Padding="10">
+                <ListBox
+                    MinHeight="100"
+                    Name="lstRelations"
+                    ItemsSource="{Binding SourceNode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:RelationView}}}"
+                    ItemTemplate="{StaticResource relTpl}"
+                    SelectionChanged="lstRelations_SelectionChanged"     
+                    />
+            </Expander>
+        </Border>
+        <Border Background="LightGreen" CornerRadius="0,0,10,10">
+            <Expander Header="Relationship properties" Name="propertiesExpander" Padding="10">
+                <my:PropertiesViewer
+                    DataContext="{Binding ElementName=lstOutgoing, Path=SelectedValue.Properties}"
+                    MinHeight="100"
+                    />
+            </Expander>
+        </Border>
+    </StackPanel>
+</UserControl>

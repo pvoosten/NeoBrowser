@@ -9,23 +9,21 @@
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type=vm:Browser_ViewModel}">
     <UserControl.Resources>
-        <DataTemplate x:Key="relTpl">
-            <TextBlock Text="{Binding Type}" ToolTip="{Binding PropertiesJsonText}" />
-        </DataTemplate>
+        <Style TargetType="my:NodeView">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" MinWidth="5" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" MinWidth="5" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="1000">
@@ -38,100 +36,32 @@
             </StackPanel>
             <Button Command="{Binding LoadNodeWithIdCommand}" CommandParameter="{Binding ElementName=txtNodeId,Path=Text}" Content="Laden"/>
         </StackPanel>
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="2"
-            Text="Node" />
         <my:NodeView
             Grid.Row="2"
-            Grid.Column="2"
+            Grid.Column="0"
             Grid.RowSpan="3"
             DataContext="{Binding ActiveNode}" />
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="1"
-            Text="Incoming relationships" />
-        <ListBox
-            Name="lstIncoming"
-            Grid.Row="2"
-            Grid.Column="1"
-            ItemsSource="{Binding ActiveNode.IncomingRelationships}"
-            ItemTemplate="{StaticResource relTpl}"
-            />
-
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="3"
-            Text="Outgoing relationships" />
-        <ListBox
-            Name="lstOutgoing"
-            Grid.Row="2"
-            Grid.Column="3"
-            ItemsSource="{Binding ActiveNode.OutgoingRelationships}"
-            ItemTemplate="{StaticResource relTpl}"
-            />
-
-        <TextBlock
-            Grid.Row="3"
-            Grid.Column="1"
-            Text="Relationship properties"
-            />
-        <my:PropertiesViewer
-            Grid.Row="4"
-            Grid.Column="1"
-            DataContext="{Binding ElementName=lstIncoming, Path=SelectedValue.Properties}"
-            />
-
-
-
-        <TextBlock
-            Grid.Row="3"
-            Grid.Column="3"
-            Text="Relationship properties"
-            />
-        <my:PropertiesViewer
-            Grid.Row="4"
-            Grid.Column="3"
-            DataContext="{Binding ElementName=lstOutgoing, Path=SelectedValue.Properties}"
-            />
-
-        <TextBlock
-            Grid.Row="1"
-            Grid.Column="0"
-            Text="Incoming connected node"
-            />
         <Button
-                Grid.Row="1"
-                Command="{Binding ActivateNodeCommand}"
-                CommandParameter="{Binding ElementName=lstIncoming,Path=SelectedValue.StartNode}"
-                >
-            &gt;&gt;&gt;
-        </Button>
-
-        <TextBlock
             Grid.Row="1"
             Grid.Column="4"
-            Text="Outgoing connected node"
+            Command="{Binding ActivateNodeCommand}"
+            CommandParameter="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode}"
+            Content="&lt;&lt;&lt;"
             />
-        <Button
-                Grid.Row="1"
-                Grid.Column="4"
-                Command="{Binding ActivateNodeCommand}"
-                CommandParameter="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode}"
-                Content="&lt;&lt;&lt;"
-                />
-
-
-
         <my:NodeView
             Grid.Row="2"
-            Grid.RowSpan="5"
-            Grid.Column="0"
-            DataContext="{Binding ElementName=lstIncoming,Path=SelectedValue.StartNode}"
+            Grid.RowSpan="1000"
+            Grid.Column="4"
+            DataContext="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode}"
+            Visibility="{Binding ElementName=lstOutgoing}"
             />
-
-
-        <my:NodeView Grid.Row="2" Grid.RowSpan="1000"  Grid.Column="4" DataContext="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode}" />
+        
+        <my:RelationView
+            Grid.Row="2"
+            Grid.Column="2"
+            VerticalAlignment="Center"
+            SourceNode="{Binding ActiveNode}"
+            />
 
     </Grid>
 </UserControl>

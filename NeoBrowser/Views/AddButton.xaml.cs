@@ -16,18 +16,13 @@ using System.Windows.Shapes;
 namespace NeoBrowser.Views
 {
     /// <summary>
-    /// Interaction logic for NodeView.xaml
+    /// Interaction logic for AddButton.xaml
     /// </summary>
-    public partial class NodeView : UserControl
+    public partial class AddButton : Button
     {
-        public NodeView()
+        public AddButton()
         {
             InitializeComponent();
-        }
-
-        private void TextBox_TextInput(object sender, TextCompositionEventArgs e)
-        {
-            btnAddLabel.IsEnabled = !string.IsNullOrWhiteSpace(e.Text);
         }
     }
 }
