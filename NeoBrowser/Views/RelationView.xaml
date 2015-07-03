@@ -14,13 +14,32 @@
     <StackPanel>
         <Border Background="Green" CornerRadius="10,10,0,0">
             <Expander Header="Relationships" Padding="10">
-                <ListBox
-                    MinHeight="100"
-                    Name="lstRelations"
-                    ItemsSource="{Binding SourceNode, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:RelationView}}}"
-                    ItemTemplate="{StaticResource relTpl}"
-                    SelectionChanged="lstRelations_SelectionChanged"     
-                    />
+                <StackPanel>
+                    <StackPanel.Resources>
+                        <Style TargetType="GroupBox">
+                            <Setter Property="Padding" Value="5" />
+                            <Setter Property="Margin" Value="5" />
+                        </Style>
+                    </StackPanel.Resources>
+                    <GroupBox Header="Incoming">
+                        <ListBox
+                            MinHeight="100"
+                            Name="lstIncoming"
+                            ItemsSource="{Binding SourceNode.IncomingRelationships, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:RelationView}}}"
+                            ItemTemplate="{StaticResource relTpl}"
+                            SelectionChanged="lstRelations_SelectionChanged"     
+                            />
+                    </GroupBox>
+                    <GroupBox Header="Outgoing">
+                        <ListBox
+                            MinHeight="100"
+                            Name="lstOutgoing"
+                            ItemsSource="{Binding SourceNode.OutgoingRelationships, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type my:RelationView}}}"
+                            ItemTemplate="{StaticResource relTpl}"
+                            SelectionChanged="lstRelations_SelectionChanged"     
+                            />
+                    </GroupBox>
+                </StackPanel>
             </Expander>
         </Border>
         <Border Background="LightGreen" CornerRadius="0,0,10,10">

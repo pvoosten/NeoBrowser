@@ -37,10 +37,10 @@ namespace NeoBrowser.Views
         // Using a DependencyProperty as the backing store for SelectedEndNode.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SelectedEndNodeProperty =
             DependencyProperty.Register("SelectedEndNode", typeof(Node_ViewModel), typeof(RelationView), new PropertyMetadata(null));
+
         #endregion
 
         #region SourceNode dependencyproperty
-
 
         public Node_ViewModel SourceNode
         {
@@ -52,21 +52,52 @@ namespace NeoBrowser.Views
         public static readonly DependencyProperty SourceNodeProperty =
             DependencyProperty.Register("SourceNode", typeof(Node_ViewModel), typeof(RelationView), new PropertyMetadata(null));
 
-        
+        #endregion
+
+        #region Relationships dependency property
+        public IEnumerable<Relationship_ViewModel> Relationships
+        {
+            get { return (IEnumerable<Relationship_ViewModel>)GetValue(RelationshipsProperty); }
+            set { SetValue(RelationshipsProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Relationships.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty RelationshipsProperty =
+            DependencyProperty.Register("Relationships", typeof(IEnumerable<Relationship_ViewModel>), typeof(RelationView), new PropertyMetadata(Enumerable.Empty<Relationship_ViewModel>()));
         #endregion
 
 
         private void lstRelations_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (lstRelations.SelectedItems.Count != 1)
+            ListBox rels;
+            bool incoming;
+            if (sender == lstIncoming && lstIncoming.SelectedIndex != -1)
             {
-                SelectedEndNode = null;
-                propertiesExpander.IsExpanded = false;
+                incoming = true;
+                rels = lstIncoming;
+                lstOutgoing.SelectedIndex = -1;
+            }
+            else if (sender == lstOutgoing && lstOutgoing.SelectedIndex != -1)
+            {
+                incoming = false;
+                rels = lstOutgoing;
+                lstIncoming.SelectedIndex = -1;
             }
             else
             {
-                SelectedEndNode = new Node_ViewModel((Client.Node)lstRelations.SelectedValue);
+                return;
+            }
+            if (rels.SelectedItems.Count == 1)
+            {
+                var rel = rels.SelectedValue as Relationship_ViewModel;
+                SelectedEndNode = incoming ? rel.StartNode : rel.EndNode;
+                propertiesExpander.DataContext = rels.SelectedValue;
                 propertiesExpander.IsExpanded = true;
+            }
+            else
+            {
+                SelectedEndNode = null;
+                propertiesExpander.IsExpanded = false;
             }
         }
 

@@ -6,7 +6,7 @@
              xmlns:my="clr-namespace:NeoBrowser.Views"
              xmlns:vm="clr-namespace:NeoBrowser.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="331" d:DesignWidth="589"
              d:DataContext="{d:DesignInstance Type=vm:Browser_ViewModel}">
     <UserControl.Resources>
         <Style TargetType="my:NodeView">
@@ -15,7 +15,6 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -26,7 +25,7 @@
             <ColumnDefinition Width="Auto" MinWidth="5" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="1000">
+        <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3">
             <TextBlock>Node id</TextBlock>
 
             <TextBox Text="{Binding NodeId}" Width="100" Name="txtNodeId" />
@@ -37,27 +36,27 @@
             <Button Command="{Binding LoadNodeWithIdCommand}" CommandParameter="{Binding ElementName=txtNodeId,Path=Text}" Content="Laden"/>
         </StackPanel>
         <my:NodeView
-            Grid.Row="2"
+            Grid.Row="1"
             Grid.Column="0"
             Grid.RowSpan="3"
             DataContext="{Binding ActiveNode}" />
         <Button
-            Grid.Row="1"
+            Grid.Row="0"
             Grid.Column="4"
             Command="{Binding ActivateNodeCommand}"
             CommandParameter="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode}"
             Content="&lt;&lt;&lt;"
             />
         <my:NodeView
-            Grid.Row="2"
+            Grid.Row="1"
             Grid.RowSpan="1000"
             Grid.Column="4"
             DataContext="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode}"
             Visibility="{Binding ElementName=lstOutgoing}"
             />
-        
+
         <my:RelationView
-            Grid.Row="2"
+            Grid.Row="1"
             Grid.Column="2"
             VerticalAlignment="Center"
             SourceNode="{Binding ActiveNode}"

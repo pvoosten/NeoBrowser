@@ -28,10 +28,15 @@
             <Expander Header="Labels" IsExpanded="True" Padding="10" Name="lbls">
                 <StackPanel>
                     <ItemsControl ItemsSource="{Binding Labels}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <WrapPanel />
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Border Margin="2" CornerRadius="5" UseLayoutRounding="True" ClipToBounds="True" Background="AliceBlue">
-                                    <Grid>
+                                <Border Margin="1" CornerRadius="5" UseLayoutRounding="True" Background="AliceBlue">
+                                    <WrapPanel>
                                         <TextBlock
                                         Margin="5"
                                         VerticalAlignment="Center"
@@ -40,10 +45,15 @@
                                             Command="{Binding ElementName=lbls, Path=DataContext.RemoveLabelCommand}"
                                             CommandParameter="{Binding}">
                                         </my:DeleteButton>
-                                    </Grid>
+                                    </WrapPanel>
                                 </Border>
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <!--<Setter Property="Width" Value="100" />-->
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
                     </ItemsControl>
                     <Border Margin="2" CornerRadius="5" UseLayoutRounding="True" ClipToBounds="True" Background="AliceBlue">
                         <Grid>
