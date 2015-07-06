@@ -1,5 +1,4 @@
-﻿
-using NeoBrowser.ViewModels;
+﻿using NeoBrowser.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +24,7 @@ namespace NeoBrowser.Views
         public RelationView()
         {
             InitializeComponent();
+            DataContext = this;
         }
 
         #region SelectedEndNode dependency property
@@ -50,56 +50,50 @@ namespace NeoBrowser.Views
 
         // Using a DependencyProperty as the backing store for SourceNode.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SourceNodeProperty =
-            DependencyProperty.Register("SourceNode", typeof(Node_ViewModel), typeof(RelationView), new PropertyMetadata(null));
+            DependencyProperty.Register("SourceNode", typeof(Node_ViewModel), typeof(RelationView), new PropertyMetadata(null, OnSourceNodeChanged));
+
+
+        private static void OnSourceNodeChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            var node = e.NewValue as Node_ViewModel;
+            var rv = sender as RelationView;
+            sender.SetValue(IncomingRelationshipsProperty, node.IncomingRelationships);
+            sender.SetValue(OutgoingRelationshipsProperty, node.OutgoingRelationships);
+            node.PropertyChanged += rv.node_PropertyChanged;
+        }
+
+        private void node_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var node = sender as Node_ViewModel;
+            node.PropertyChanged -= node_PropertyChanged;
+            SourceNode = node;
+        }
 
         #endregion
 
-        #region Relationships dependency property
-        public IEnumerable<Relationship_ViewModel> Relationships
+        public IEnumerable<Relationship_ViewModel> IncomingRelationships
         {
-            get { return (IEnumerable<Relationship_ViewModel>)GetValue(RelationshipsProperty); }
-            set { SetValue(RelationshipsProperty, value); }
+            get { return (IEnumerable<Relationship_ViewModel>)GetValue(IncomingRelationshipsProperty); }
+            set { SetValue(IncomingRelationshipsProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Relationships.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty RelationshipsProperty =
-            DependencyProperty.Register("Relationships", typeof(IEnumerable<Relationship_ViewModel>), typeof(RelationView), new PropertyMetadata(Enumerable.Empty<Relationship_ViewModel>()));
-        #endregion
+        // Using a DependencyProperty as the backing store for IncomingRelationships.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IncomingRelationshipsProperty =
+            DependencyProperty.Register("IncomingRelationships", typeof(IEnumerable<Relationship_ViewModel>), typeof(RelationView), new PropertyMetadata(Enumerable.Empty<Relationship_ViewModel>()));
 
 
-        private void lstRelations_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public IEnumerable<Relationship_ViewModel> OutgoingRelationships
         {
-            ListBox rels;
-            bool incoming;
-            if (sender == lstIncoming && lstIncoming.SelectedIndex != -1)
-            {
-                incoming = true;
-                rels = lstIncoming;
-                lstOutgoing.SelectedIndex = -1;
-            }
-            else if (sender == lstOutgoing && lstOutgoing.SelectedIndex != -1)
-            {
-                incoming = false;
-                rels = lstOutgoing;
-                lstIncoming.SelectedIndex = -1;
-            }
-            else
-            {
-                return;
-            }
-            if (rels.SelectedItems.Count == 1)
-            {
-                var rel = rels.SelectedValue as Relationship_ViewModel;
-                SelectedEndNode = incoming ? rel.StartNode : rel.EndNode;
-                propertiesExpander.DataContext = rels.SelectedValue;
-                propertiesExpander.IsExpanded = true;
-            }
-            else
-            {
-                SelectedEndNode = null;
-                propertiesExpander.IsExpanded = false;
-            }
+            get { return (IEnumerable<Relationship_ViewModel>)GetValue(OutgoingRelationshipsProperty); }
+            set { SetValue(OutgoingRelationshipsProperty, value); }
         }
+
+        // Using a DependencyProperty as the backing store for OutgoingRelationships.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty OutgoingRelationshipsProperty =
+            DependencyProperty.Register("OutgoingRelationships", typeof(IEnumerable<Relationship_ViewModel>), typeof(RelationView), new PropertyMetadata(Enumerable.Empty<Relationship_ViewModel>()));
+
+        
+
 
     }
 }

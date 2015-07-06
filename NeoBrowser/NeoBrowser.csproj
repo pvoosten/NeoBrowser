@@ -109,6 +109,9 @@
     <Compile Include="Views\PropertiesViewer.xaml.cs">
       <DependentUpon>PropertiesViewer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\RelationshipList.xaml.cs">
+      <DependentUpon>RelationshipList.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RelationView.xaml.cs">
       <DependentUpon>RelationView.xaml</DependentUpon>
     </Compile>
@@ -141,6 +144,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PropertiesViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RelationshipList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
