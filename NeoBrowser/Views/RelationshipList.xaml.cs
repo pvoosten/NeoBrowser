@@ -24,48 +24,6 @@ namespace NeoBrowser.Views
         public RelationshipList()
         {
             InitializeComponent();
-            DataContext = this;
-        }
-
-
-
-        public string Title
-        {
-            get { return (string)GetValue(TitleProperty); }
-            set { SetValue(TitleProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for Title.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty TitleProperty =
-            DependencyProperty.Register("Title", typeof(string), typeof(RelationshipList), new PropertyMetadata("Relationships"));
-
-
-
-        public string NewRelationshipType
-        {
-            get { return (string)GetValue(NewRelationshipTypeProperty); }
-            set { SetValue(NewRelationshipTypeProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for NewRelationshipType.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty NewRelationshipTypeProperty =
-            DependencyProperty.Register("NewRelationshipType", typeof(string), typeof(RelationshipList), new PropertyMetadata(null));
-
-
-
-        public IEnumerable<Relationship_ViewModel> Relationships
-        {
-            get { return (IEnumerable<Relationship_ViewModel>)GetValue(RelationshipsProperty); }
-            set { SetValue(RelationshipsProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for Relationships.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty RelationshipsProperty =
-            DependencyProperty.Register("Relationships", typeof(IEnumerable<Relationship_ViewModel>), typeof(RelationshipList), new PropertyMetadata(Enumerable.Empty<Relationship_ViewModel>()));
-
-        internal void Deselect()
-        {
-            lstIncoming.SelectedIndex = -1;
         }
     }
 }

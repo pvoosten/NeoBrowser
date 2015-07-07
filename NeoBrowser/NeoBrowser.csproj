@@ -93,7 +93,9 @@
     <Compile Include="ViewModels\Browser_ViewModel.cs" />
     <Compile Include="ViewModels\MainWindow_ViewModel.cs" />
     <Compile Include="ViewModels\Node_ViewModel.cs" />
+    <Compile Include="ViewModels\RelationshipList_ViewModel.cs" />
     <Compile Include="ViewModels\Relationship_ViewModel.cs" />
+    <Compile Include="ViewModels\RelationView_ViewModel.cs" />
     <Compile Include="Views\DeleteButton.xaml.cs">
       <DependentUpon>DeleteButton.xaml</DependentUpon>
     </Compile>

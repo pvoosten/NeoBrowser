@@ -27,7 +27,7 @@ namespace NeoBrowser.Views
 
         private void TextBox_TextInput(object sender, TextCompositionEventArgs e)
         {
-            btnAddLabel.IsEnabled = !string.IsNullOrWhiteSpace(e.Text);
+            btnAddLabel.IsEnabled = !string.IsNullOrWhiteSpace(e.ControlText);
         }
     }
 }

@@ -59,7 +59,7 @@
             Grid.Row="1"
             Grid.Column="2"
             VerticalAlignment="Center"
-            SourceNode="{Binding ActiveNode}"
+            DataContext="{Binding ActiveNodeRelationships}"
             />
 
     </Grid>

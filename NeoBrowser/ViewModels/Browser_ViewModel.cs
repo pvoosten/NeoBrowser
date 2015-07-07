@@ -81,6 +81,7 @@ namespace NeoBrowser.ViewModels
         private void ActivateNode(Node_ViewModel node)
         {
             ActiveNode = node;
+            ActiveNodeRelationships = new RelationView_ViewModel { SourceNode = node, SelectedEndNode = null };
         }
 
         private bool ActivateNodeEnabled(Node_ViewModel node)
@@ -104,7 +105,8 @@ namespace NeoBrowser.ViewModels
                 try
                 {
                     var node = await _db.GetNodeWithId(NodeId);
-                    ActiveNode = new Node_ViewModel(node);
+                    var nodeVm = new Node_ViewModel(node);
+                    ActivateNode(nodeVm);
                 }
                 catch (GraphDatabaseException)
                 {
@@ -141,6 +143,24 @@ namespace NeoBrowser.ViewModels
 
         #endregion Node_ViewModel ActiveNode
 
+        #region RelationView_ViewModel ActiveNodeRelationships
+
+        private RelationView_ViewModel _activeNodeRelationships;
+        public RelationView_ViewModel ActiveNodeRelationships
+        {
+            get
+            {
+                return _activeNodeRelationships;
+            }
+            set
+            {
+                if (_activeNodeRelationships == value) return;
+                _activeNodeRelationships = value;
+                RaisePropertyChanged("ActiveNodeRelationships");
+            }
+        }
+
+        #endregion RelationView_ViewModel ActiveNodeRelationships
 
 
     }

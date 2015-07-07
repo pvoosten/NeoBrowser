@@ -4,14 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:my="clr-namespace:NeoBrowser.Views"
+             xmlns:vm="clr-namespace:NeoBrowser.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance Type=vm:RelationView_ViewModel, IsDesignTimeCreatable=True}">
     <StackPanel>
         <Border Background="Green" CornerRadius="10,10,0,0">
-            <Expander Header="Relationships" Padding="10">
+            <Expander Header="Relationships" Padding="10" IsExpanded="True">
                 <StackPanel>
-                    <my:RelationshipList Title="Incoming" Relationships="{Binding IncomingRelationships}" />
-                    <my:RelationshipList Title="Outgoing" Relationships="{Binding OutgoingRelationships}" />
+                    <my:RelationshipList DataContext="{Binding IncomingRelationshipsList}" />
+                    <my:RelationshipList DataContext="{Binding OutgoingRelationshipsList}" />
                 </StackPanel>
             </Expander>
         </Border>
