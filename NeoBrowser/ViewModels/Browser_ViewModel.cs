@@ -17,7 +17,16 @@ namespace NeoBrowser.ViewModels
 
         public Browser_ViewModel()
         {
-            _db = new GraphDatabase("http://localhost:7474").Authenticate("neo4j", "longbow");
+            if (IsInDesignMode)
+            {
+                NodeId = 50;
+                ActiveNode = new Node_ViewModel();
+                ActiveNodeRelationships = new RelationView_ViewModel();
+            }
+            else
+            {
+                _db = new GraphDatabase("http://localhost:7474").Authenticate("neo4j", "longbow");
+            }
             LoadNodeWithIdCommand = new RelayCommand(LoadNodeWithId, LoadNodeWithIdEnabled);
             IncrementNodeIdCommand = new RelayCommand(IncrementNodeId, IncrementNodeIdEnabled);
             DecrementNodeIdCommand = new RelayCommand(DecrementNodeId, DecrementNodeIdEnabled);
@@ -99,7 +108,7 @@ namespace NeoBrowser.ViewModels
         {
             int tries = 10;
             bool itFailed = true;
-            while (itFailed && tries --> 0)
+            while (itFailed && tries-- > 0)
             {
                 itFailed = false;
                 try

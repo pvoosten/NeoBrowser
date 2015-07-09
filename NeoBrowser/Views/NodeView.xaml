@@ -61,8 +61,10 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox Background="Transparent" BorderBrush="Transparent" Text="{Binding AddLabelText}" Margin="3" TextInput="TextBox_TextInput" />
-                            <my:AddButton Grid.Column="1" Command="{Binding AddLabelCommand}" x:Name="btnAddLabel"/>
+                            <TextBox Background="Transparent" BorderBrush="Transparent" Text="{Binding AddLabelText}" Margin="3" />
+                            <Button Background="Transparent" Foreground="Transparent" BorderBrush="Transparent" Grid.Column="1"  Command="{Binding AddLabelCommand}">
+                                <my:AddButton IsHitTestVisible="False" />
+                            </Button>
                         </Grid>
                     </Border>
                 </StackPanel>

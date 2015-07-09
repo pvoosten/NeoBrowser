@@ -28,7 +28,7 @@
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3">
             <TextBlock>Node id</TextBlock>
 
-            <TextBox Text="{Binding NodeId}" Width="100" Name="txtNodeId" />
+            <TextBox Text="{Binding NodeId, Mode=TwoWay}" Width="100" Name="txtNodeId" />
             <StackPanel>
                 <Button Height="12" Width="18" Command="{Binding IncrementNodeIdCommand}">^</Button>
                 <Button Height="12" Command="{Binding DecrementNodeIdCommand}">v</Button>

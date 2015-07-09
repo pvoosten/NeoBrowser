@@ -15,6 +15,12 @@ namespace NeoBrowser.ViewModels
             if (IsInDesignMode)
             {
                 Title = "In/outgoing";
+                Relationships = new List<Relationship_ViewModel>
+                {
+                    new Relationship_ViewModel("Alpha"),
+                    new Relationship_ViewModel("Beta")
+                };
+                NewRelationshipType = "NewRelType";
 
             }
         }

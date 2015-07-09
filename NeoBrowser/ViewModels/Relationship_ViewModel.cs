@@ -13,23 +13,36 @@ namespace NeoBrowser.ViewModels
     public class Relationship_ViewModel : ViewModelBase
     {
         private Client.Relationship _rel;
+        private readonly string _type;
 
         public Relationship_ViewModel(Client.Relationship rel)
         {
             _rel = rel;
+            _type = _rel.Type;
             PropertiesJsonText = _rel.Properties.ToString(Formatting.Indented);
             var serializer = JsonSerializer.CreateDefault();
             serializer.Converters.Add(new ExpandoObjectConverter());
             Properties = rel.Properties.ToObject<ExpandoObject>(serializer);
         }
 
+        public Relationship_ViewModel(string type)
+        {
+            if(IsInDesignMode){
+                _type = type;
+            }
+        }
+
+        #region string Type
+        
         public string Type
         {
             get
             {
-                return _rel.Type;
+                return _type;
             }
         }
+
+        #endregion string Type
 
         public string PropertiesJsonText { get; private set; }
 

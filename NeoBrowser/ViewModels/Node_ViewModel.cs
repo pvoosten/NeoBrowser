@@ -23,11 +23,13 @@ namespace NeoBrowser.ViewModels
             if (IsInDesignMode)
             {
                 Labels = new ObservableCollection<string> { "Alpha", "Beta", "Gaga" };
+                Id = 101;
                 dynamic d = new ExpandoObject();
                 d.Alpha = "alpha property";
                 d.Beta = "beta property";
                 d.Gamma = "Gamma property";
                 Properties = d;
+                AddLabelText = "New Label";
             }
         }
 
@@ -40,7 +42,7 @@ namespace NeoBrowser.ViewModels
             serializer.Converters.Add(new ExpandoObjectConverter());
             Properties = node.Properties.ToObject<ExpandoObject>(serializer);
             DeleteCommand = new RelayCommand(Delete, DeleteEnabled);
-            AddLabelCommand = new RelayCommand(AddLabel, AddLabelEnabled);
+            AddLabelCommand = new RelayCommand(AddLabel);
             RemoveLabelCommand = new RelayCommand<string>(RemoveLabel, RemoveLabelEnabled);
             _deleted = false;
             Init();
@@ -204,8 +206,9 @@ namespace NeoBrowser.ViewModels
         {
             try
             {
-                string lbl = AddLabelText;
+                string lbl = AddLabelText.Trim();
                 AddLabelText = "";
+                if (Labels.Contains(lbl)) return;
                 await _node.SetLabels(Labels.Union(new string[] { lbl }).ToArray());
                 Labels.Add(lbl);
             }
@@ -213,11 +216,6 @@ namespace NeoBrowser.ViewModels
             {
                 // nothing happens
             }
-        }
-
-        private bool AddLabelEnabled()
-        {
-            return !string.IsNullOrEmpty(AddLabelText) && (Labels == null || !Labels.Contains(AddLabelText));
         }
 
         #endregion AddLabel command

@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:my="clr-namespace:NeoBrowser.Views"
+             xmlns:vm="clr-namespace:NeoBrowser.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             d:DataContext="{d:DesignInstance Type=vm:RelationshipList_ViewModel,IsDesignTimeCreatable=True}">
     <UserControl.Resources>
         <DataTemplate x:Key="relTpl">
             <TextBlock Text="{Binding Type}" ToolTip="{Binding PropertiesJsonText}" />
@@ -24,9 +26,7 @@
                                 ItemTemplate="{StaticResource relTpl}"
                                 />
             <WrapPanel Grid.Row="1" >
-                <Border Height="40" CornerRadius="20">
                 <TextBox Text="{Binding NewRelationshipType}" MinWidth="150" Margin="0" />
-                </Border>
                 <my:AddButton />
             </WrapPanel>
         </Grid>
