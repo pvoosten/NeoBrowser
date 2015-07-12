@@ -23,9 +23,10 @@ namespace NeoBrowser.ViewModels
                 NewRelationshipType = "NewRelType";
 
             }
+            SelectedIndex = -1;
         }
 
-        public RelationshipList_ViewModel(string title, List<Relationship_ViewModel> relationships)
+        public RelationshipList_ViewModel(string title, List<Relationship_ViewModel> relationships) : this()
         {
             Title = title;
             Relationships = relationships;
@@ -87,5 +88,24 @@ namespace NeoBrowser.ViewModels
         }
 
         #endregion List<Relationship_ViewModel> Relationships
+        #region int SelectedIndex
+
+        private int _selectedIndex;
+        public int SelectedIndex
+        {
+            get
+            {
+                return _selectedIndex;
+            }
+            set
+            {
+                if (_selectedIndex == value) return;
+                _selectedIndex = value;
+                RaisePropertyChanged("SelectedIndex");
+            }
+        }
+
+        #endregion int SelectedIndex
+
     }
 }

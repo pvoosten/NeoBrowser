@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight;
+using NeoBrowser.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,8 +12,26 @@ namespace NeoBrowser.ViewModels
     public class RelationView_ViewModel : ViewModelBase
     {
 
-        private const string _IncomingRelationshipsProperty = "IncomingRelationships";
-        private const string _OutgoingRelationshipsProperty = "OutgoingRelationships";
+        public RelationView_ViewModel()
+        {
+            SelectedEndNode = new Node_ViewModel();
+            SourceNode = new Node_ViewModel();
+            SelectedRelationship = new Relationship_ViewModel("alpha");
+        }
+
+        private void RelationshipList_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var vm = sender as RelationshipList_ViewModel;
+            if (vm != null && e.PropertyName == "SelectedIndex")
+            {
+                bool hitIncoming = vm == IncomingRelationshipList;
+                var selected = hitIncoming ? IncomingRelationshipList : OutgoingRelationshipList;
+                if (selected.SelectedIndex == -1) return;
+                var unselected = hitIncoming ? OutgoingRelationshipList : IncomingRelationshipList;
+                unselected.SelectedIndex = -1;
+                SelectedRelationship = selected.Relationships[selected.SelectedIndex];
+            }
+        }
 
         #region Node_ViewModel SelectedEndNode
 
@@ -60,7 +79,7 @@ namespace NeoBrowser.ViewModels
         private void SourceNodeUpdated()
         {
 
-            IncomingRelationshipList = new RelationshipList_ViewModel("Incoming", SourceNode==null?null:SourceNode.IncomingRelationships);
+            IncomingRelationshipList = new RelationshipList_ViewModel("Incoming", SourceNode == null ? null : SourceNode.IncomingRelationships);
             OutgoingRelationshipList = new RelationshipList_ViewModel("Outgoing", SourceNode == null ? null : SourceNode.OutgoingRelationships);
 
         }
@@ -80,6 +99,7 @@ namespace NeoBrowser.ViewModels
             {
                 if (_incomingRelationshipList == value) return;
                 _incomingRelationshipList = value;
+                _incomingRelationshipList.PropertyChanged += RelationshipList_PropertyChanged;
                 RaisePropertyChanged("IncomingRelationshipList");
             }
         }
@@ -99,11 +119,30 @@ namespace NeoBrowser.ViewModels
             {
                 if (_outgoingRelationshipList == value) return;
                 _outgoingRelationshipList = value;
+                _outgoingRelationshipList.PropertyChanged += RelationshipList_PropertyChanged;
                 RaisePropertyChanged("OutgoingRelationshipList");
             }
         }
 
         #endregion RelationshipList_ViewModel OutgoingRelationshipList
+        #region Relationship_ViewModel SelectedRelationship
+
+        private Relationship_ViewModel _selectedRelationship;
+        public Relationship_ViewModel SelectedRelationship
+        {
+            get
+            {
+                return _selectedRelationship;
+            }
+            set
+            {
+                if (_selectedRelationship == value) return;
+                _selectedRelationship = value;
+                RaisePropertyChanged("SelectedRelationship");
+            }
+        }
+
+        #endregion Relationship_ViewModel SelectedRelationship
 
     }
 }

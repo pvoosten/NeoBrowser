@@ -30,6 +30,16 @@ namespace NeoBrowser.ViewModels
                 d.Gamma = "Gamma property";
                 Properties = d;
                 AddLabelText = "New Label";
+                IncomingRelationships = new List<Relationship_ViewModel>
+                {
+                    new Relationship_ViewModel("alpha"),
+                    new Relationship_ViewModel("beta")
+                };
+                OutgoingRelationships = new List<Relationship_ViewModel>
+                {
+                    new Relationship_ViewModel("gamma"),
+                    new Relationship_ViewModel("delta")
+                };
             }
         }
 

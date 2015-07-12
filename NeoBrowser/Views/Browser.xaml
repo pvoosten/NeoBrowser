@@ -6,8 +6,8 @@
              xmlns:my="clr-namespace:NeoBrowser.Views"
              xmlns:vm="clr-namespace:NeoBrowser.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="331" d:DesignWidth="589"
-             d:DataContext="{d:DesignInstance Type=vm:Browser_ViewModel}">
+             d:DesignHeight="500" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=vm:Browser_ViewModel,IsDesignTimeCreatable=True}">
     <UserControl.Resources>
         <Style TargetType="my:NodeView">
             <Setter Property="VerticalAlignment" Value="Center" />

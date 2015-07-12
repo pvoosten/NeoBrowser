@@ -6,21 +6,20 @@
              xmlns:my="clr-namespace:NeoBrowser.Views"
              xmlns:vm="clr-namespace:NeoBrowser.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type=vm:RelationView_ViewModel, IsDesignTimeCreatable=True}">
     <StackPanel>
         <Border Background="Green" CornerRadius="10,10,0,0">
             <Expander Header="Relationships" Padding="10" IsExpanded="True">
                 <StackPanel>
-                    <my:RelationshipList DataContext="{Binding IncomingRelationshipsList}" />
-                    <my:RelationshipList DataContext="{Binding OutgoingRelationshipsList}" />
+                    <my:RelationshipList DataContext="{Binding IncomingRelationshipList}" />
+                    <my:RelationshipList DataContext="{Binding OutgoingRelationshipList}" />
                 </StackPanel>
             </Expander>
         </Border>
         <Border Background="LightGreen" CornerRadius="0,0,10,10">
-            <Expander Header="Relationship properties" Name="propertiesExpander" Padding="10">
+            <Expander Header="Relationship properties" Name="propertiesExpander" Padding="10" IsExpanded="True">
                 <my:PropertiesViewer
-                    DataContext="{Binding ElementName=lstOutgoing, Path=SelectedValue.Properties}"
+                    DataContext="{Binding Path=SelectedRelationship.Properties}"
                     MinHeight="100"
                     />
             </Expander>

@@ -20,11 +20,12 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <ListBox
-                                MinHeight="100"
-                                Name="lstIncoming"
-                                ItemsSource="{Binding Relationships}"
-                                ItemTemplate="{StaticResource relTpl}"
-                                />
+                MinHeight="100"
+                Name="lstIncoming"
+                ItemsSource="{Binding Relationships}"
+                ItemTemplate="{StaticResource relTpl}"
+                SelectedIndex="{Binding SelectedIndex}"
+                />
             <WrapPanel Grid.Row="1" >
                 <TextBox Text="{Binding NewRelationshipType}" MinWidth="150" Margin="0" />
                 <my:AddButton />
