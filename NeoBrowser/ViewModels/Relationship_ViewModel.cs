@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace NeoBrowser.ViewModels
 {
@@ -27,13 +28,14 @@ namespace NeoBrowser.ViewModels
 
         public Relationship_ViewModel(string type)
         {
-            if(IsInDesignMode){
+            if (IsInDesignMode)
+            {
                 _type = type;
             }
         }
 
         #region string Type
-        
+
         public string Type
         {
             get
@@ -67,52 +69,48 @@ namespace NeoBrowser.ViewModels
 
         #region Node_ViewModel StartNode
 
-        private bool _gettingStartNode = false;
         private Node_ViewModel _startNode;
         public Node_ViewModel StartNode
         {
             get
             {
-                if (_startNode == null && !_gettingStartNode)
+                if (_rel == null) return null;
+                if (_startNode == null)
                 {
-                    _gettingStartNode = true;
-                    _rel.GetStartNode().ContinueWith(t => StartNode = new Node_ViewModel(t.Result));
+                    SetStartNode();
                 }
                 return _startNode;
             }
-            set
-            {
-                _gettingStartNode = false;
-                if (_startNode == value) return;
-                _startNode = value;
-                RaisePropertyChanged("StartNode");
-            }
+        }
+
+        private async void SetStartNode()
+        {
+            _startNode = new Node_ViewModel(await _rel.GetStartNode());
+            RaisePropertyChanged("StartNode");
         }
 
         #endregion Node_ViewModel StartNode
 
         #region Node_ViewModel EndNode
 
-        private bool _gettingEndNode = false;
         private Node_ViewModel _endNode;
         public Node_ViewModel EndNode
         {
             get
             {
-                if (_endNode == null && !_gettingEndNode)
+                if (_rel == null) return null;
+                if (_endNode == null)
                 {
-                    _gettingEndNode = true;
-                    _rel.GetEndNode().ContinueWith(t => EndNode = new Node_ViewModel(t.Result));
+                    SetEndNode();
                 }
                 return _endNode;
             }
-            set
-            {
-                _gettingEndNode = false;
-                if (_endNode == value) return;
-                _endNode = value;
-                RaisePropertyChanged("EndNode");
-            }
+        }
+
+        private async void SetEndNode()
+        {
+            _endNode = new Node_ViewModel(await _rel.GetEndNode());
+            RaisePropertyChanged("EndNode");
         }
 
         #endregion Node_ViewModel EndNode

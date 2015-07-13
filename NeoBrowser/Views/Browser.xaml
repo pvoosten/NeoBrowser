@@ -40,19 +40,11 @@
             Grid.Column="0"
             Grid.RowSpan="3"
             DataContext="{Binding ActiveNode}" />
-        <Button
-            Grid.Row="0"
-            Grid.Column="4"
-            Command="{Binding ActivateNodeCommand}"
-            CommandParameter="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode}"
-            Content="&lt;&lt;&lt;"
-            />
         <my:NodeView
             Grid.Row="1"
             Grid.RowSpan="1000"
             Grid.Column="4"
-            DataContext="{Binding ElementName=lstOutgoing,Path=SelectedValue.EndNode}"
-            Visibility="{Binding ElementName=lstOutgoing}"
+            DataContext="{Binding ActiveNodeRelationships.SelectedEndNode}"
             />
 
         <my:RelationView

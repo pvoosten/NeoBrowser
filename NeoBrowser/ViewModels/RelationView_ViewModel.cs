@@ -12,6 +12,8 @@ namespace NeoBrowser.ViewModels
     public class RelationView_ViewModel : ViewModelBase
     {
 
+        private bool _hitIncoming;
+
         public RelationView_ViewModel()
         {
             SelectedEndNode = new Node_ViewModel();
@@ -24,12 +26,26 @@ namespace NeoBrowser.ViewModels
             var vm = sender as RelationshipList_ViewModel;
             if (vm != null && e.PropertyName == "SelectedIndex")
             {
-                bool hitIncoming = vm == IncomingRelationshipList;
-                var selected = hitIncoming ? IncomingRelationshipList : OutgoingRelationshipList;
+                _hitIncoming = vm == IncomingRelationshipList;
+                var selected = _hitIncoming ? IncomingRelationshipList : OutgoingRelationshipList;
                 if (selected.SelectedIndex == -1) return;
-                var unselected = hitIncoming ? OutgoingRelationshipList : IncomingRelationshipList;
+                var unselected = _hitIncoming ? OutgoingRelationshipList : IncomingRelationshipList;
                 unselected.SelectedIndex = -1;
                 SelectedRelationship = selected.Relationships[selected.SelectedIndex];
+                SelectedEndNode = _hitIncoming ? SelectedRelationship.StartNode : SelectedRelationship.EndNode;
+                if (SelectedEndNode == null)
+                {
+                    SelectedRelationship.PropertyChanged += SelectedRelationship_PropertyChanged;
+                    SelectedEndNode = _hitIncoming ? SelectedRelationship.StartNode : SelectedRelationship.EndNode;
+                }
+            }
+        }
+
+        void SelectedRelationship_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (_hitIncoming && e.PropertyName == "StartNode" || !_hitIncoming && e.PropertyName == "EndNode")
+            {
+                SelectedEndNode = _hitIncoming ? SelectedRelationship.StartNode : SelectedRelationship.EndNode;
             }
         }
 

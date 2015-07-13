@@ -171,6 +171,5 @@ namespace NeoBrowser.ViewModels
 
         #endregion RelationView_ViewModel ActiveNodeRelationships
 
-
     }
 }
