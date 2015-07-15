@@ -28,7 +28,10 @@ namespace NeoBrowser.ViewModels
                 d.Alpha = "alpha property";
                 d.Beta = "beta property";
                 d.Gamma = "Gamma property";
-                Properties = d;
+                Properties = new Properties_ViewModel
+                {
+                    Properties = d
+                };
                 AddLabelText = "New Label";
                 IncomingRelationships = new List<Relationship_ViewModel>
                 {
@@ -50,7 +53,10 @@ namespace NeoBrowser.ViewModels
             PropertiesJsonText = node.Properties.ToString(Formatting.Indented);
             var serializer = JsonSerializer.CreateDefault();
             serializer.Converters.Add(new ExpandoObjectConverter());
-            Properties = node.Properties.ToObject<ExpandoObject>(serializer);
+            Properties = new Properties_ViewModel
+            {
+                Properties = node.Properties.ToObject<ExpandoObject>(serializer)
+            };
             DeleteCommand = new RelayCommand(Delete, DeleteEnabled);
             AddLabelCommand = new RelayCommand(AddLabel);
             RemoveLabelCommand = new RelayCommand<string>(RemoveLabel, RemoveLabelEnabled);
@@ -126,10 +132,10 @@ namespace NeoBrowser.ViewModels
 
         #endregion List<string> Labels
 
-        #region ExpandoObject Properties
+        #region Properties_ViewModel Properties
 
-        private ExpandoObject _properties;
-        public ExpandoObject Properties
+        private Properties_ViewModel _properties;
+        public Properties_ViewModel Properties
         {
             get
             {
@@ -143,8 +149,7 @@ namespace NeoBrowser.ViewModels
             }
         }
 
-        #endregion ExpandoObject Properties
-
+        #endregion Properties_ViewModel Properties
 
         #region List<Relationship_ViewModel> IncomingRelationships
 

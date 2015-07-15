@@ -6,7 +6,7 @@
              xmlns:my="clr-namespace:NeoBrowser.Views"
              xmlns:vm="clr-namespace:NeoBrowser.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="463" d:DesignWidth="300"
+             d:DesignHeight="463" d:DesignWidth="436"
              d:DataContext="{d:DesignInstance Type=vm:Node_ViewModel, IsDesignTimeCreatable=True}">
     <StackPanel>
         <Border CornerRadius="10,10,0,0">

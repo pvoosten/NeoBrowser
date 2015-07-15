@@ -91,8 +91,10 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="ViewModels\Browser_ViewModel.cs" />
+    <Compile Include="ViewModels\EditValueWindow_ViewModel.cs" />
     <Compile Include="ViewModels\MainWindow_ViewModel.cs" />
     <Compile Include="ViewModels\Node_ViewModel.cs" />
+    <Compile Include="ViewModels\Properties_ViewModel.cs" />
     <Compile Include="ViewModels\RelationshipList_ViewModel.cs" />
     <Compile Include="ViewModels\Relationship_ViewModel.cs" />
     <Compile Include="ViewModels\RelationView_ViewModel.cs" />
@@ -104,6 +106,9 @@
     </Compile>
     <Compile Include="Views\Browser.xaml.cs">
       <DependentUpon>Browser.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditValueWindow.xaml.cs">
+      <DependentUpon>EditValueWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NodeView.xaml.cs">
       <DependentUpon>NodeView.xaml</DependentUpon>
@@ -138,6 +143,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\Browser.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditValueWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
