@@ -8,14 +8,12 @@ using System.Threading.Tasks;
 
 namespace NeoBrowser.Client
 {
-    public class Relationship
+    public class Relationship : PropertiesContainer
     {
 
         [JsonConstructor]
         internal Relationship() { }
 
-        [JsonIgnore]
-        internal RestConnection Connection { get; set; }
 
         [JsonProperty("extensions")]
         private JObject _extensions;
@@ -38,19 +36,6 @@ namespace NeoBrowser.Client
             return node;
         }
 
-        // http://localhost:7474/db/data/relationship/13/properties/{key}
-        [JsonProperty("property")]
-        private string _propertyUri;
-
-        public async Task<T> GetProperty<T>(string key)
-        {
-            return await Connection.Get<T>(_propertyUri.Replace("{key}", key));
-        }
-
-        public async Task SetProperty<T>(string key, T value)
-        {
-            await Connection.Put(_propertyUri.Replace("{key}", key), value);
-        }
 
         // http://localhost:7474/db/data/relationship/13
         [JsonProperty("self")]
@@ -62,19 +47,6 @@ namespace NeoBrowser.Client
         public async Task Delete()
         {
             await Connection.Delete(_selfUri);
-        }
-
-        // http://localhost:7474/db/data/relationship/13/properties
-        [JsonProperty("properties")]
-        private string _propertiesUri;
-        public async Task<JObject> GetProperties()
-        {
-            return await Connection.Get<JObject>(_propertiesUri);
-        }
-
-        public async Task SetProperties(object properties)
-        {
-            await Connection.Put(_propertiesUri, properties);
         }
 
         /// <summary>
@@ -97,9 +69,6 @@ namespace NeoBrowser.Client
 
         [JsonProperty("metadata")]
         public RelationshipMetadata Metadata { get; private set; }
-
-        [JsonProperty("data")]
-        public JObject Properties { get; private set; }
 
     }
 }

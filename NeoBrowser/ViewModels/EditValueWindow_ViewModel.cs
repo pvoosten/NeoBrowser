@@ -1,5 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -83,7 +84,7 @@ namespace NeoBrowser.ViewModels
         {
             try
             {
-                JObject.Parse(NewValue);
+                JToken.Parse(NewValue);
                 return true;
             }
             catch

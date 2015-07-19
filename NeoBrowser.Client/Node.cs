@@ -8,16 +8,13 @@ using System.Threading.Tasks;
 
 namespace NeoBrowser.Client
 {
-    public class Node
+    public class Node : PropertiesContainer
     {
         [JsonConstructor]
         internal Node()
         {
 
         }
-
-        [JsonIgnore]
-        internal RestConnection Connection { get; set; }
 
         [JsonProperty("labels")]
         private string _labelsUrl;
@@ -124,17 +121,12 @@ namespace NeoBrowser.Client
         private JObject _extensions;
         [JsonProperty("traverse")]
         private string _traverseUrl;
-        [JsonProperty("properties")]
-        private string _propertiesUrl;
 
         [JsonProperty("paged_traverse")]
         private string _pagedTraverseUrl;
 
         [JsonProperty("metadata")]
         public NodeMetadata Metadata { get; private set; }
-
-        [JsonProperty("data")]
-        public JObject Properties { get; private set; }
 
         public async Task RemoveLabel(string label)
         {

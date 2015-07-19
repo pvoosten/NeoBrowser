@@ -20,10 +20,7 @@ namespace NeoBrowser.ViewModels
         {
             _rel = rel;
             _type = _rel.Type;
-            PropertiesJsonText = _rel.Properties.ToString(Formatting.Indented);
-            var serializer = JsonSerializer.CreateDefault();
-            serializer.Converters.Add(new ExpandoObjectConverter());
-            Properties = rel.Properties.ToObject<ExpandoObject>(serializer);
+            Properties = new Properties_ViewModel(_rel);
         }
 
         public Relationship_ViewModel(string type)
@@ -34,24 +31,10 @@ namespace NeoBrowser.ViewModels
             }
         }
 
-        #region string Type
+        #region Properties_ViewModel Properties
 
-        public string Type
-        {
-            get
-            {
-                return _type;
-            }
-        }
-
-        #endregion string Type
-
-        public string PropertiesJsonText { get; private set; }
-
-        #region ExpandoObject Properties
-
-        private ExpandoObject _properties;
-        public ExpandoObject Properties
+        private Properties_ViewModel _properties;
+        public Properties_ViewModel Properties
         {
             get
             {
@@ -65,7 +48,19 @@ namespace NeoBrowser.ViewModels
             }
         }
 
-        #endregion ExpandoObject Properties
+        #endregion Properties_ViewModel Properties
+
+        #region string Type
+
+        public string Type
+        {
+            get
+            {
+                return _type;
+            }
+        }
+
+        #endregion string Type
 
         #region Node_ViewModel StartNode
 

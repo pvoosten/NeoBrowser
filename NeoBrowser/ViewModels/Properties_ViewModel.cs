@@ -15,31 +15,22 @@ namespace NeoBrowser.ViewModels
 {
     public class Properties_ViewModel : ViewModelBase
     {
-        public Properties_ViewModel()
+        private readonly Client.PropertiesContainer _container;
+
+        public Properties_ViewModel(Client.PropertiesContainer container)
         {
+            _container = container;
             EditPropertyCommand = new RelayCommand<string>(EditProperty, EditPropertyEnabled);
             AddPropertyCommand = new RelayCommand(AddProperty, AddPropertyEnabled);
         }
 
-        #region ExpandoObject Properties
-
-        private ExpandoObject _properties;
-        public ExpandoObject Properties
+        public JObject Properties
         {
             get
             {
-                return _properties;
-            }
-            set
-            {
-                if (_properties == value) return;
-                _properties = value;
-                RaisePropertyChanged("Properties");
+                return _container.Properties;
             }
         }
-
-        #endregion ExpandoObject Properties
-
 
         #region EditProperty command
         public ICommand EditPropertyCommand { get; private set; }
@@ -47,21 +38,27 @@ namespace NeoBrowser.ViewModels
         private void EditProperty(string param)
         {
             if (!EditPropertyEnabled(param)) return;
-            var dct = Properties as IDictionary<string, object>;
             var vm = new EditValueWindow_ViewModel();
-            vm.OldValue = ((JObject)dct[param]).ToString(Formatting.Indented);
+            vm.OldValue = Properties.Property(param).Value.ToString(Formatting.Indented);
             vm.NewValue = vm.OldValue;
             var window = new EditValueWindow { Title = "Edit value of \"" + param + "\"", DataContext = vm };
             window.ShowDialog();
             if (vm.IsConfirmed)
             {
-                dct[param] = JObject.Parse(vm.NewValue);
+                SetPropertyValue(param, vm);
             }
+        }
+
+        private async void SetPropertyValue(string param, EditValueWindow_ViewModel vm)
+        {
+            var v = JToken.Parse(vm.NewValue);
+            Properties.Property(param).Value = v;
+            await _container.SetProperty(param, v);
         }
 
         private bool EditPropertyEnabled(string param)
         {
-            return param != null && Properties != null && (Properties as IDictionary<string,object>).ContainsKey(param);
+            return true;
         }
 
         #endregion EditProperty command

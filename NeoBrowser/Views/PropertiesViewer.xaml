@@ -23,7 +23,7 @@
                     <GridViewColumn
                     Header="Name"
                     Width="100"
-                    DisplayMemberBinding="{Binding Key}">
+                    DisplayMemberBinding="{Binding Name}">
                     </GridViewColumn>
                     <GridViewColumn
                     Header="Value"
@@ -36,12 +36,12 @@
                     </GridViewColumn>
                     <GridViewColumn
                     Header="Actions"
-                    Width="50">
+                    Width="80">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <WrapPanel>
-                                    <Button Command="{Binding DataContext.EditPropertyCommand, ElementName=userControl}" CommandParameter="{Binding Key}">Edit</Button>
-                                    <Button Command="{Binding DataContext.DeletePropertyCommand, ElementName=userControl}" CommandParameter="{Binding Key}">
+                                    <Button Command="{Binding DataContext.EditPropertyCommand, ElementName=userControl}" CommandParameter="{Binding Name}">Edit</Button>
+                                    <Button Command="{Binding DataContext.DeletePropertyCommand, ElementName=userControl}" CommandParameter="{Binding Name}">
                                         <my:DeleteButton IsHitTestVisible="False" />
                                     </Button>
                                 </WrapPanel>
