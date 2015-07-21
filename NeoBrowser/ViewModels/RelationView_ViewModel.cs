@@ -95,9 +95,33 @@ namespace NeoBrowser.ViewModels
         private void SourceNodeUpdated()
         {
 
-            IncomingRelationshipList = new RelationshipList_ViewModel("Incoming", SourceNode == null ? null : SourceNode.IncomingRelationships);
-            OutgoingRelationshipList = new RelationshipList_ViewModel("Outgoing", SourceNode == null ? null : SourceNode.OutgoingRelationships);
+            IncomingRelationshipList = new RelationshipList_ViewModel("Incoming", SourceNode == null ? null : SourceNode.IncomingRelationships, AddIncomingRelationship, AddIncomingRelationshipEnabled);
+            OutgoingRelationshipList = new RelationshipList_ViewModel("Outgoing", SourceNode == null ? null : SourceNode.OutgoingRelationships, AddOutgoingRelationship, AddOutgoingRelationshipEnabled);
 
+        }
+
+        private bool AddOutgoingRelationshipEnabled()
+        {
+            return true;
+        }
+
+        private bool AddIncomingRelationshipEnabled()
+        {
+            return true;
+        }
+
+        private void AddOutgoingRelationship()
+        {
+            string type = OutgoingRelationshipList.NewRelationshipType;
+            ulong id = OutgoingRelationshipList.RelatedNodeId;
+            SourceNode.AddRelationship(false, type, id);
+        }
+
+        private void AddIncomingRelationship()
+        {
+            string type = IncomingRelationshipList.NewRelationshipType;
+            ulong id = IncomingRelationshipList.RelatedNodeId;
+            SourceNode.AddRelationship(true, type, id);
         }
 
         #endregion Node_ViewModel SourceNode

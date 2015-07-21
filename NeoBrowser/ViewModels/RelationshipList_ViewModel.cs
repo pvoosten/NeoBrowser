@@ -1,10 +1,12 @@
 ﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.CommandWpf;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace NeoBrowser.ViewModels
 {
@@ -26,10 +28,12 @@ namespace NeoBrowser.ViewModels
             SelectedIndex = -1;
         }
 
-        public RelationshipList_ViewModel(string title, List<Relationship_ViewModel> relationships) : this()
+        public RelationshipList_ViewModel(string title, List<Relationship_ViewModel> relationships, Action addRelationship, Func<bool> addRelationshipEnabled)
+            : this()
         {
             Title = title;
             Relationships = relationships;
+            AddRelationshipCommand = new RelayCommand(addRelationship, addRelationshipEnabled);
         }
 
         #region string Title
@@ -68,7 +72,6 @@ namespace NeoBrowser.ViewModels
         }
 
         #endregion string NewRelationshipType
-
         #region List<Relationship_ViewModel> Relationships
 
         private List<Relationship_ViewModel> _relationships;
@@ -106,6 +109,24 @@ namespace NeoBrowser.ViewModels
         }
 
         #endregion int SelectedIndex
+        #region int RelatedNodeId
 
+        private ulong _relatedNodeId;
+        public ulong RelatedNodeId
+        {
+            get
+            {
+                return _relatedNodeId;
+            }
+            set
+            {
+                if (_relatedNodeId == value) return;
+                _relatedNodeId = value;
+                RaisePropertyChanged("RelatedNodeId");
+            }
+        }
+
+        #endregion int RelatedNodeId
+        public ICommand AddRelationshipCommand { get; private set; }
     }
 }

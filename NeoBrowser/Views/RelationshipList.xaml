@@ -26,9 +26,12 @@
                 ItemTemplate="{StaticResource relTpl}"
                 SelectedIndex="{Binding SelectedIndex}"
                 />
-            <WrapPanel Grid.Row="1" >
+            <WrapPanel Grid.Row="1" Margin="0,4,0,0">
                 <TextBox Text="{Binding NewRelationshipType}" MinWidth="150" Margin="0" />
-                <my:AddButton />
+                <TextBox Text="{Binding RelatedNodeId}" Width="40" Margin="4,0,4,0"/>
+                <Button Command="{Binding AddRelationshipCommand}">
+                    <my:AddButton IsHitTestVisible="False" />
+                </Button>
             </WrapPanel>
         </Grid>
     </GroupBox>

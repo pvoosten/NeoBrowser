@@ -247,5 +247,18 @@ namespace NeoBrowser.ViewModels
 
         #endregion string AddLabelText
 
+
+        internal async void AddRelationship(bool incoming, string relationshipType, ulong relatedNodeId)
+        {
+            if (incoming)
+            {
+                await _node.CreateRelationshipFrom(relationshipType, relatedNodeId);
+            }
+            else
+            {
+                await _node.CreateRelationshipTo(relationshipType, relatedNodeId);
+            }
+            RaisePropertyChanged(incoming ? "IncomingRelationships" : "OutgoingRelationships");
+        }
     }
 }

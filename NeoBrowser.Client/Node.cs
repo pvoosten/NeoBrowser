@@ -141,5 +141,17 @@ namespace NeoBrowser.Client
                 await Connection.Post(_labelsUrl, labels);
             }
         }
+
+        public async Task CreateRelationshipFrom(string relationshipType, ulong relatedNodeId)
+        {
+            Node node = await Connection.GetNodeWithId(relatedNodeId);
+            await node.CreateRelationShip(this, relationshipType);
+        }
+
+        public async Task CreateRelationshipTo(string relationshipType, ulong relatedNodeId)
+        {
+            Node node = await Connection.GetNodeWithId(relatedNodeId);
+            await CreateRelationShip(node, relationshipType);
+        }
     }
 }
