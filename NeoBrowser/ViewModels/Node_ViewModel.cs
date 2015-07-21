@@ -72,8 +72,11 @@ namespace NeoBrowser.ViewModels
 
         private void Delete()
         {
-            _node.Delete();
-            _deleted = true;
+            if (DeleteEnabled())
+            {
+                _node.Delete();
+                _deleted = true;
+            }
         }
 
         private bool DeleteEnabled()

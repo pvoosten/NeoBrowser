@@ -22,6 +22,7 @@ namespace NeoBrowser.ViewModels
             _container = container;
             EditPropertyCommand = new RelayCommand<string>(EditProperty, EditPropertyEnabled);
             AddPropertyCommand = new RelayCommand(AddProperty, AddPropertyEnabled);
+            DeletePropertyCommand = new RelayCommand<string>(DeleteProperty, DeletePropertyEnabled);
         }
 
         public JObject Properties
@@ -80,22 +81,34 @@ namespace NeoBrowser.ViewModels
         }
 
         #endregion string AddPropertyText
-
         #region AddProperty command
         public ICommand AddPropertyCommand { get; private set; }
 
         private void AddProperty()
         {
-            throw new NotImplementedException("AddProperty command not yet implemented");
+            Properties.Add(AddPropertyText, JToken.Parse("null"));
         }
 
         private bool AddPropertyEnabled()
         {
-            return true;
+            return !string.IsNullOrEmpty(AddPropertyText) && Properties.Properties().All(p => p.Name != AddPropertyText);
         }
 
         #endregion AddProperty command
+        #region DeleteProperty command
+        public ICommand DeletePropertyCommand { get; private set; }
 
+        private async void DeleteProperty(string propertyName)
+        {
+            Properties.Remove(propertyName);
+            await _container.DeleteProperty(propertyName);
+        }
 
+        private bool DeletePropertyEnabled(string param)
+        {
+            return true;
+        }
+
+        #endregion DeleteProperty command
     }
 }

@@ -16,7 +16,12 @@
                     <GradientStop Color="Cyan" Offset="1"/>
                 </LinearGradientBrush>
             </Border.Background>
-            <TextBlock Foreground="White" FontWeight="Bold" Text="{Binding Id}" Padding="5"/>
+            <Grid>
+                <TextBlock Foreground="White" FontWeight="Bold" Text="{Binding Id}" Padding="5"/>
+                <Button Command="{Binding DeleteCommand}" HorizontalAlignment="Right" Margin="0,0,15,0">
+                    <my:DeleteButton IsHitTestVisible="False" />
+                </Button>
+            </Grid>
         </Border>
         <Border CornerRadius="0,0,0,0">
             <Border.Background>
