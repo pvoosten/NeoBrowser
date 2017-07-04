@@ -25,7 +25,7 @@ namespace NeoBrowser.ViewModels
             }
             else
             {
-                _db = new GraphDatabase("http://localhost:7474").Authenticate("neo4j", "longbow");
+                _db = new GraphDatabase("http://localhost:7474").Authenticate("neo4j", "foobarbaz");
             }
             LoadNodeWithIdCommand = new RelayCommand(LoadNodeWithId, LoadNodeWithIdEnabled);
             IncrementNodeIdCommand = new RelayCommand(IncrementNodeId, IncrementNodeIdEnabled);

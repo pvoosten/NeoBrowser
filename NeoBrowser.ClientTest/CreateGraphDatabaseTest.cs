@@ -26,7 +26,7 @@ namespace NeoBrowser.ClientTest
         {
             if (testNodesCreated)
             {
-               await gdb.ExecuteCypherStatements("MATCH (n:Testnode) DELETE n");
+                await gdb.ExecuteCypherStatements("MATCH (n:Testnode) DELETE n");
             }
         }
 
@@ -36,11 +36,11 @@ namespace NeoBrowser.ClientTest
             gdb = new GraphDatabase(new Uri(TestUtil.URL));
         }
 
-        [Test, ExpectedException(ExpectedException=typeof(GraphDatabaseException))]
-        public async void GetDatabaseVersionWithoutAuthentication()
+        [Test]
+        public void GetDatabaseVersionWithoutAuthentication()
         {
             gdb = new GraphDatabase(TestUtil.URL);
-            string version = await gdb.GetDatabaseVersion();
+            Assert.Throws<GraphDatabaseException>(async () => await gdb.GetDatabaseVersion());
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace NeoBrowser.ClientTest
             gdb = new GraphDatabase(TestUtil.URL)
                 .Authenticate(TestUtil.USER, TestUtil.PASSWORD);
             string version = await gdb.GetDatabaseVersion();
-            Assert.AreEqual("2.", version.Substring(0,2));
+            Assert.AreEqual("2.", version.Substring(0, 2));
         }
 
         [Test]
@@ -95,11 +95,11 @@ namespace NeoBrowser.ClientTest
             Assert.AreEqual(node.Metadata.Labels, sameNode.Metadata.Labels);
         }
 
-        [Test,ExpectedException(typeof(GraphDatabaseException))]
-        public async void GetNonExistentNode()
+        [Test]
+        public void GetNonExistentNode()
         {
             var gdb = TestUtil.GetGraphDb();
-            await gdb.GetNodeWithId(5555555);
+            Assert.Throws<GraphDatabaseException>(async () => await gdb.GetNodeWithId(5555555));
         }
 
 
